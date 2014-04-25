@@ -29,13 +29,13 @@ import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
 import javax.swing.*;
-import org.jfugue.*;
+//import org.jfugue.*;
 
 /**
  *
  * @author Avi
  */
-public class LessonB extends JFrame implements KeyListener, ParserListener {
+public class LessonB extends JFrame implements KeyListener {
 
     boolean keyOnePressed;
     boolean keyTwoPressed;
@@ -79,10 +79,10 @@ public class LessonB extends JFrame implements KeyListener, ParserListener {
 
     //This begins the section that I am testing around with and am not confident in
     Graphics pic;
-   static MidiParser bam;
-    ParserListener bamB;
-    static Sequence theSequence;
-    static DeviceThatWillTransmitMidi keyBoard;
+//   static MidiParser bam;
+//    ParserListener bamB;
+//    static Sequence theSequence;
+//    static DeviceThatWillTransmitMidi keyBoard;
 //This ends the section that I am testing around with and am not confident in
 
     public LessonB() {
@@ -120,10 +120,10 @@ public class LessonB extends JFrame implements KeyListener, ParserListener {
 chocolate.midMan.setOurLesson(this);
 MidiDevice bamha = chocolate.device;
 System.out.println(chocolate.device.getDeviceInfo());
-        bam = new MidiParser();
+//        bam = new MidiParser();
 //                bam = new MidiParser();
 //bam.parse(theSequence);
-        bam.addParserListener(bamB);
+//        bam.addParserListener(bamB);
 
         gameScore = 0;
         chordList = new ArrayList<Chord>(0);
@@ -536,123 +536,123 @@ chordList.add (chordList.size(), aFlatMin);
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public void voiceEvent(Voice voice) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void tempoEvent(Tempo tempo) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void instrumentEvent(Instrument instrument) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void layerEvent(Layer layer) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void measureEvent(Measure measure) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void timeEvent(Time time) {
+//    @Override
+//    public void voiceEvent(Voice voice) {
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void keySignatureEvent(KeySignature keySig) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void controllerEvent(Controller controller) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void channelPressureEvent(ChannelPressure channelPressure) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void polyphonicPressureEvent(PolyphonicPressure polyphonicPressure) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void pitchBendEvent(PitchBend pitchBend) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void noteEvent(Note e) {
-             System.out.println("We Did IT!!!");
-       if (e.getValue() == notea) {
-//        System.out.println("you pressed up");
-            keyOnePressed = true;
-//        chord.put(e.getKeyChar(), true);
-        } else if (arrangeNote(e.getValue()) == noteb) {
-//        System.out.println("you pressed down");
-            keyTwoPressed = true;
-        } else if (arrangeNote(e.getValue()) == notec) {
-//        System.out.println("you pressed left");
-            keyThreePressed = true;
-        } else if (arrangeNote(e.getValue()) == noted) {
-//        System.out.println("you pressed right");
-            keyFourPressed = true;
-        } else {
-        }
-       
+//    }
+//
+//    @Override
+//    public void tempoEvent(Tempo tempo) {
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void sequentialNoteEvent(Note e) {
-         if (e.getValue() == notea) {
-//        System.out.println("you pressed up");
-            keyOnePressed = true;
-//        chord.put(e.getKeyChar(), true);
-        } else if (arrangeNote(e.getValue()) == noteb) {
-//        System.out.println("you pressed down");
-            keyTwoPressed = true;
-        } else if (arrangeNote(e.getValue()) == notec) {
-//        System.out.println("you pressed left");
-            keyThreePressed = true;
-        } else if (arrangeNote(e.getValue()) == noted) {
-//        System.out.println("you pressed right");
-            keyFourPressed = true;
-        } else {
-        }
-        //supposedly will return _ for others
+//    }
+//
+//    @Override
+//    public void instrumentEvent(Instrument instrument) {
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void parallelNoteEvent(Note e) {
-         if (e.getValue() == notea) {
-//        System.out.println("you pressed up");
-            keyOnePressed = true;
-//        chord.put(e.getKeyChar(), true);
-        } else if (arrangeNote(e.getValue()) == noteb) {
-//        System.out.println("you pressed down");
-            keyTwoPressed = true;
-        } else if (arrangeNote(e.getValue()) == notec) {
-//        System.out.println("you pressed left");
-            keyThreePressed = true;
-        } else if (arrangeNote(e.getValue()) == noted) {
-//        System.out.println("you pressed right");
-            keyFourPressed = true;
-        } else {
-        }
-        e.getMusicString(); //supposedly will return + for each same note
+//    }
+//
+//    @Override
+//    public void layerEvent(Layer layer) {
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+//    }
+//
+//    @Override
+//    public void measureEvent(Measure measure) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
+//
+//    @Override
+//    public void timeEvent(Time time) {
+////        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
+//
+//    @Override
+//    public void keySignatureEvent(KeySignature keySig) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
+//
+//    @Override
+//    public void controllerEvent(Controller controller) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
+//
+//    @Override
+//    public void channelPressureEvent(ChannelPressure channelPressure) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
+//
+//    @Override
+//    public void polyphonicPressureEvent(PolyphonicPressure polyphonicPressure) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
+//
+//    @Override
+//    public void pitchBendEvent(PitchBend pitchBend) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
+//
+//    @Override
+//    public void noteEvent(Note e) {
+//             System.out.println("We Did IT!!!");
+//       if (e.getValue() == notea) {
+////        System.out.println("you pressed up");
+//            keyOnePressed = true;
+////        chord.put(e.getKeyChar(), true);
+//        } else if (arrangeNote(e.getValue()) == noteb) {
+////        System.out.println("you pressed down");
+//            keyTwoPressed = true;
+//        } else if (arrangeNote(e.getValue()) == notec) {
+////        System.out.println("you pressed left");
+//            keyThreePressed = true;
+//        } else if (arrangeNote(e.getValue()) == noted) {
+////        System.out.println("you pressed right");
+//            keyFourPressed = true;
+//        } else {
+//        }
+//       
+////        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
+//
+//    @Override
+//    public void sequentialNoteEvent(Note e) {
+//         if (e.getValue() == notea) {
+////        System.out.println("you pressed up");
+//            keyOnePressed = true;
+////        chord.put(e.getKeyChar(), true);
+//        } else if (arrangeNote(e.getValue()) == noteb) {
+////        System.out.println("you pressed down");
+//            keyTwoPressed = true;
+//        } else if (arrangeNote(e.getValue()) == notec) {
+////        System.out.println("you pressed left");
+//            keyThreePressed = true;
+//        } else if (arrangeNote(e.getValue()) == noted) {
+////        System.out.println("you pressed right");
+//            keyFourPressed = true;
+//        } else {
+//        }
+//        //supposedly will return _ for others
+////        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
+//
+//    @Override
+//    public void parallelNoteEvent(Note e) {
+//         if (e.getValue() == notea) {
+////        System.out.println("you pressed up");
+//            keyOnePressed = true;
+////        chord.put(e.getKeyChar(), true);
+//        } else if (arrangeNote(e.getValue()) == noteb) {
+////        System.out.println("you pressed down");
+//            keyTwoPressed = true;
+//        } else if (arrangeNote(e.getValue()) == notec) {
+////        System.out.println("you pressed left");
+//            keyThreePressed = true;
+//        } else if (arrangeNote(e.getValue()) == noted) {
+////        System.out.println("you pressed right");
+//            keyFourPressed = true;
+//        } else {
+//        }
+//        e.getMusicString(); //supposedly will return + for each same note
+////        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
 
 }
