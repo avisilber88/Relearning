@@ -96,7 +96,7 @@ Container window;
 		if (canCountSecond()) {
 			tf.setText("" + (int) howManySeconds());
 			av.setText("brought to you by Silber Solutions");
-			System.out.println(time / 10);
+//			System.out.println(time / 10);
 //			paintComponents(this.getGraphics());
 			repaint();
 		}

@@ -12,9 +12,14 @@ package relearning;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Image;
+import java.awt.Insets;
+import java.awt.Rectangle;
 import java.awt.event.*;
 
 import java.awt.image.ImageObserver;
@@ -35,7 +40,7 @@ import javax.swing.*;
  *
  * @author Avi
  */
-public class LessonB extends JFrame implements KeyListener {
+public class LessonB extends JPanel implements KeyListener, ActionListener {
 
     boolean keyOnePressed;
     boolean keyTwoPressed;
@@ -43,9 +48,9 @@ public class LessonB extends JFrame implements KeyListener {
     boolean keyFourPressed;
     int randomNum;
     List notesIn;
-    JTextField blob;
-    JTextField playThis;
-    JTextField scoreSheet;
+    JTextArea blob;
+    JTextArea playThis;
+    JTextArea scoreSheetTextArea;
     JPanel staffPanel;
     Map chordSet;
     List<Chord> chordList;
@@ -70,15 +75,30 @@ public class LessonB extends JFrame implements KeyListener {
     int fSharpNote = gFlatNote;
     int gSharpNote = aFlatNote;
     int aSharpNote = bFlatNote;
-
+    String currentChordName;
     int notea;
     int noteb;
     int notec;
     int noted;
+    int numNotesPressed;
+    int wrongNotesCount;
     int gameScore;
-
+    JFrame top;
+    Timer timer;
+    Timer chordTimer;
+    int chordTime;
+    int time;
+    double timeFast;
+    double difficulty;
+    double difficultyAddative;
+    JTextArea timePassedTextArea;
+    JTextArea titleLineTextArea;
+    JTextArea wrongNotesCountTextArea;
+    int wrongNotesCountThisChord;
+    Chord currentChord;
     //This begins the section that I am testing around with and am not confident in
     Graphics pic;
+    Container window;
 //   static MidiParser bam;
 //    ParserListener bamB;
 //    static Sequence theSequence;
@@ -86,40 +106,46 @@ public class LessonB extends JFrame implements KeyListener {
 //This ends the section that I am testing around with and am not confident in
 
     public LessonB() {
-
-    }
-
-    public static void main(String[] args) throws MidiUnavailableException, InterruptedException {
+        difficultyAddative = .02;
+        difficulty = 1;
+        currentChordName = "";
+        wrongNotesCount = 0;
+        wrongNotesCountThisChord = 0;
 //DeviceThatWillTransmitMidi keyBoard2 = new DeviceThatWillTransmitMidi();
-        LessonB top = new LessonB();
-
+        top = new JFrame();
+        top.add(this);
 //Sequencer sequencer = bamha.getDeviceInfo();
- try {
-     MidiDevice.Info[] infos = MidiSystem.getMidiDeviceInfo();
-                MidiDevice device = MidiSystem.getMidiDevice(infos[1]);
-                 } catch (MidiUnavailableException e) {
-            }
- 
- 
- 
+        try {
+            MidiDevice.Info[] infos = MidiSystem.getMidiDeviceInfo();
+            MidiDevice device = MidiSystem.getMidiDevice(infos[1]);
+        } catch (MidiUnavailableException e) {
+        }
+
 //        keyBoard=keyBoard2;
 //        keyBoard.addParserListener(top);
 ////        keyBoard2.listenForMillis(10000);
 //        keyBoard.startListening();
 //        Sequence music = keyBoard.getSequenceFromListening();
 //        theSequence = music;
-
         top.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        top.letsMake();
-        top.startGame();
+        letsMake();
+        startGame();
+    }
+
+    public static void main(String[] args) {//throws MidiUnavailableException, InterruptedException {
+        //try {
+        new LessonB();
+        //}catch(MidiUnavailableException e){
+        //   System.out.println();
+        //}
     }
 
     public void startGame() {
         MidiHandler chocolate = new MidiHandler();
-chocolate.midMan.setOurLesson(this);
-MidiDevice bamha = chocolate.device;
-System.out.println(chocolate.device.getDeviceInfo());
+        chocolate.midMan.setOurLesson(this);
+        MidiDevice bamha = chocolate.device;
+        System.out.println(chocolate.device.getDeviceInfo());
 //        bam = new MidiParser();
 //                bam = new MidiParser();
 //bam.parse(theSequence);
@@ -191,23 +217,23 @@ System.out.println(chocolate.device.getDeviceInfo());
         gMaj.addChord("G", gNote, bNote, dNote);
         gSharpMaj.addChord("G#", gSharpNote, cNote, dSharpNote);
         aFlatMaj.addChord("Ab", gSharpNote, cNote, dSharpNote);
-chordList.add (chordList.size(), aMaj);
-chordList.add (chordList.size(), aSharpMaj);
-chordList.add (chordList.size(), bFlatMaj);
-chordList.add (chordList.size(), bMaj);
-chordList.add (chordList.size(), cMaj);
-chordList.add (chordList.size(), cSharpMaj);
-chordList.add (chordList.size(), dFlatMaj);
-chordList.add (chordList.size(), dMaj);
-chordList.add (chordList.size(), dSharpMaj);
-chordList.add (chordList.size(), eFlatMaj);
-chordList.add (chordList.size(), eMaj);
-chordList.add (chordList.size(), fMaj);
-chordList.add (chordList.size(), fSharpMaj);
-chordList.add (chordList.size(), gFlatMaj);
-chordList.add (chordList.size(), gMaj);
-chordList.add (chordList.size(), gSharpMaj);
-chordList.add (chordList.size(), aFlatMaj);
+        chordList.add(chordList.size(), aMaj);
+        chordList.add(chordList.size(), aSharpMaj);
+        chordList.add(chordList.size(), bFlatMaj);
+        chordList.add(chordList.size(), bMaj);
+        chordList.add(chordList.size(), cMaj);
+        chordList.add(chordList.size(), cSharpMaj);
+        chordList.add(chordList.size(), dFlatMaj);
+        chordList.add(chordList.size(), dMaj);
+        chordList.add(chordList.size(), dSharpMaj);
+        chordList.add(chordList.size(), eFlatMaj);
+        chordList.add(chordList.size(), eMaj);
+        chordList.add(chordList.size(), fMaj);
+        chordList.add(chordList.size(), fSharpMaj);
+        chordList.add(chordList.size(), gFlatMaj);
+        chordList.add(chordList.size(), gMaj);
+        chordList.add(chordList.size(), gSharpMaj);
+        chordList.add(chordList.size(), aFlatMaj);
 
     }
 
@@ -246,23 +272,102 @@ chordList.add (chordList.size(), aFlatMaj);
         gMin.addChord("Gm", gNote, bFlatNote, dNote);
         gSharpMin.addChord("G#m", gSharpNote, bNote, dSharpNote);
         aFlatMin.addChord("Abm", gSharpNote, bNote, dSharpNote);
-chordList.add (chordList.size(), aMin);
-chordList.add (chordList.size(), aSharpMin);
-chordList.add (chordList.size(), bFlatMin);
-chordList.add (chordList.size(), bMin);
-chordList.add (chordList.size(), cMin);
-chordList.add (chordList.size(), cSharpMin);
-chordList.add (chordList.size(), dFlatMin);
-chordList.add (chordList.size(), dMin);
-chordList.add (chordList.size(), dSharpMin);
-chordList.add (chordList.size(), eFlatMin);
-chordList.add (chordList.size(), eMin);
-chordList.add (chordList.size(), fMin);
-chordList.add (chordList.size(), fSharpMin);
-chordList.add (chordList.size(), gFlatMin);
-chordList.add (chordList.size(), gMin);
-chordList.add (chordList.size(), gSharpMin);
-chordList.add (chordList.size(), aFlatMin);
+        chordList.add(chordList.size(), aMin);
+        chordList.add(chordList.size(), aSharpMin);
+        chordList.add(chordList.size(), bFlatMin);
+        chordList.add(chordList.size(), bMin);
+        chordList.add(chordList.size(), cMin);
+        chordList.add(chordList.size(), cSharpMin);
+        chordList.add(chordList.size(), dFlatMin);
+        chordList.add(chordList.size(), dMin);
+        chordList.add(chordList.size(), dSharpMin);
+        chordList.add(chordList.size(), eFlatMin);
+        chordList.add(chordList.size(), eMin);
+        chordList.add(chordList.size(), fMin);
+        chordList.add(chordList.size(), fSharpMin);
+        chordList.add(chordList.size(), gFlatMin);
+        chordList.add(chordList.size(), gMin);
+        chordList.add(chordList.size(), gSharpMin);
+        chordList.add(chordList.size(), aFlatMin);
+
+    }
+
+    public void makeMajorSeventhChords() {
+
+    }
+
+    public void makeMinorSeventhChords() {
+        Chord aMin = new Chord();
+        Chord aSharpMinSeventh = new Chord();
+        Chord bFlatMinSeventh = new Chord();
+        Chord bMinSeventh = new Chord();
+        Chord cMinSeventh = new Chord();
+        Chord cSharpMinSeventh = new Chord();
+        Chord dFlatMinSeventh = new Chord();
+        Chord dMinSeventh = new Chord();
+        Chord dSharpMinSeventh = new Chord();
+        Chord eFlatMinSeventh = new Chord();
+        Chord eMinSeventh = new Chord();
+        Chord fMinSeventh = new Chord();
+        Chord fSharpMinSeventh = new Chord();
+        Chord gFlatMinSeventh = new Chord();
+        Chord gMinSeventh = new Chord();
+        Chord gSharpMinSeventh = new Chord();
+        Chord aFlatMinSeventh = new Chord();
+        aMin.addChord("Am7", aNote, cNote, eNote, eNote + 3);
+        aSharpMinSeventh.addChord("A#m7", bFlatNote, dFlatNote, fNote, fNote + 3);
+        bFlatMinSeventh.addChord("Bbm7", bFlatNote, dFlatNote, fNote, fNote + 3);
+        bMinSeventh.addChord("Bm7", bNote, dNote, fSharpNote, fSharpNote + 3);
+        cMinSeventh.addChord("Cm7", cNote, eFlatNote, gNote, gNote + 3);
+        cSharpMinSeventh.addChord("C#m7", cSharpNote, eNote, gSharpNote, gSharpNote + 3);
+        dFlatMinSeventh.addChord("Dbm7", cSharpNote, eNote, gSharpNote, gSharpNote + 3);
+        dMinSeventh.addChord("Dm7", dNote, fNote, aNote, aNote + 3);
+        dSharpMinSeventh.addChord("D#m7", dSharpNote, gFlatNote, aSharpNote, aSharpNote + 3);
+        eFlatMinSeventh.addChord("Ebm7", dSharpNote, gFlatNote, aSharpNote);
+        eMinSeventh.addChord("Em7", eNote, gNote, bNote);
+        fMinSeventh.addChord("Fm7", fNote, aFlatNote, cNote);
+        fSharpMinSeventh.addChord("F#m7", fSharpNote, aNote, cSharpNote);
+        gFlatMinSeventh.addChord("Gbm7", fSharpNote, aNote, cSharpNote);
+        gMinSeventh.addChord("Gm7", gNote, bFlatNote, dNote);
+        gSharpMinSeventh.addChord("G#m7", gSharpNote, bNote, dSharpNote);
+        aFlatMinSeventh.addChord("Abm7", gSharpNote, bNote, dSharpNote);
+        chordList.add(chordList.size(), aMin);
+        chordList.add(chordList.size(), aSharpMinSeventh);
+        chordList.add(chordList.size(), bFlatMinSeventh);
+        chordList.add(chordList.size(), bMinSeventh);
+        chordList.add(chordList.size(), cMinSeventh);
+        chordList.add(chordList.size(), cSharpMinSeventh);
+        chordList.add(chordList.size(), dFlatMinSeventh);
+        chordList.add(chordList.size(), dMinSeventh);
+        chordList.add(chordList.size(), dSharpMinSeventh);
+        chordList.add(chordList.size(), eFlatMinSeventh);
+        chordList.add(chordList.size(), eMinSeventh);
+        chordList.add(chordList.size(), fMinSeventh);
+        chordList.add(chordList.size(), fSharpMinSeventh);
+        chordList.add(chordList.size(), gFlatMinSeventh);
+        chordList.add(chordList.size(), gMinSeventh);
+        chordList.add(chordList.size(), gSharpMinSeventh);
+        chordList.add(chordList.size(), aFlatMinSeventh);
+
+    }
+
+    public void makeDominantSeventhChords() {
+
+    }
+
+    public void makeMinorNinthChords() {
+
+    }
+
+    public void makeMajorNinthChords() {
+
+    }
+
+    public void makeSuspendedTwoChords() {
+
+    }
+
+    public void makeSuspendedFourChords() {
 
     }
 
@@ -271,7 +376,11 @@ chordList.add (chordList.size(), aFlatMin);
         int minimum = 0;
         Random rn = new Random();
         randomNum = rn.nextInt((maximum - minimum)) + minimum;
-        playThis.setText(chordList.get(randomNum).myName);
+        currentChordName = chordList.get(randomNum).myName;
+        currentChord = chordList.get(randomNum);
+        playThis.setText(currentChordName);
+        chordTime = 0;
+        difficulty = difficulty + difficultyAddative;
         notesIn = chordList.get(randomNum).notes;
         if (notesIn.size() > 0) {
             notea = (int) notesIn.get(0);
@@ -418,7 +527,10 @@ chordList.add (chordList.size(), aFlatMin);
 //            System.out.println("You Win!!");
 
             gameScore = gameScore + 1;
-            scoreSheet.setText("Your score is " + gameScore);
+            scoreSheetTextArea.setText("Your score is " + gameScore);
+            currentChord.addMistakes(wrongNotesCountThisChord);
+            currentChord.raiseChorcCount();
+            wrongNotesCountThisChord = 0;
             pickAChord();
         }
 
@@ -431,36 +543,109 @@ chordList.add (chordList.size(), aFlatMin);
     }
 
     public void letsMake() { //make the setup and everything
-        this.setBounds(0, 0, 700, 400);
-        this.setSize(700, 400);
-        playThis = new JTextField(20);
-        blob = new JTextField(20);
-        scoreSheet = new JTextField(20);
-        staffPanel = new JPanel();
+
+        time = 0;
+        timeFast = 10;
+        chordTime = 0;
+//        timer = new Timer(100, this);
+//        timer.start();
+        chordTimer = new Timer(10, this);
+        chordTimer.start();
+        // this.paint(shape);
+//		frame = new JFrame();
+        top.setSize(500, 500);
+        Rectangle shape = new Rectangle(5, 5, 5, 5);
+        top.setContentPane(this);
+        window = top.getContentPane();
+
+        timePassedTextArea = new JTextArea();
+        timePassedTextArea.setRows(1);
+        timePassedTextArea.setColumns(1);
+        window.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        timePassedTextArea.setRows(1);
+        timePassedTextArea.setColumns(1);
+        playThis = new JTextArea();
+        playThis.setRows(1);
+        playThis.setColumns(1);
+        blob = new JTextArea();
+        blob.setRows(1);
+        blob.setColumns(1);
+        scoreSheetTextArea = new JTextArea();
+        scoreSheetTextArea.setRows(1);
+        scoreSheetTextArea.setColumns(1);
+        wrongNotesCountTextArea = new JTextArea();
+        wrongNotesCountTextArea.setRows(1);
+        wrongNotesCountTextArea.setColumns(1);
+
+        titleLineTextArea = new JTextArea();
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weighty = 0.5;
+        c.gridx = 1;
+        c.gridy = 1;
+//        c.insets = new Insets(0, 0, 100, 0); // (space out up, space out left,
+        // space out down, space out
+        // right)
+        window.add(timePassedTextArea, c);
+//		c.gridx = 2;
+//		c.gridy = 0;
+//		window.add(new MyPanel(), c);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 1;
+//        c.insets = new Insets(0, 0, 100, 0); // (space out up, space out left,
+        // space out down, space out
+        // right)
+        window.add(scoreSheetTextArea, c);
+        scoreSheetTextArea.setAlignmentX(LEFT_ALIGNMENT);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weightx = 0.5;
+//        c.weighty=0.5;
+        c.gridx = 0;
+        c.gridy = 0;
+
+        window.add(playThis, c);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.gridy = 0;
+        window.add(blob, c);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 2;
+        window.add(wrongNotesCountTextArea, c);
+//       c.gridx = 0;
+//       c.gridy = 10;
+//        window.add(titleLineTextArea, c);
+//        c.gridx = 1;
+        // timePassedTextArea.setAlignmentY(250); f.add(new MyPanel());
+//		this.pack();
+        top.setVisible(true);
+//        this.setBounds(0, 0, 700, 400);
+//        this.setSize(700, 400);
+
+//        staffPanel = new JPanel();
 //       staffPanel.setBounds (200, 50, 0, 50);
-        getContentPane().add(playThis, BorderLayout.PAGE_START);
-        getContentPane().add(scoreSheet, BorderLayout.PAGE_END);
-        getContentPane().add(staffPanel, BorderLayout.CENTER);
-        getContentPane().add(blob);
-        setVisible(true);
-        blob.addKeyListener(this);
+//        top.getContentPane().add(playThis, BorderLayout.PAGE_START);
+//        top.getContentPane().add(scoreSheetTextArea, BorderLayout.PAGE_END);
+//        top.getContentPane().add(staffPanel, BorderLayout.CENTER);
+//        top.getContentPane().add(blob);
+//        setVisible(true);
+//        blob.addKeyListener(this);
 //    blob.setText("hi");
-        playThis.setEditable(false);
+//        playThis.setEditable(false);
         blob.setEditable(false);
         blob.grabFocus();
 
-        staffPanel.setSize(555, 555);
+//        staffPanel.setSize(555, 555);
 //        getContentPane().
 //        staffPanel.setBackground(Color.red);
-        staffPanel.setForeground(Color.BLUE);
+//        staffPanel.setForeground(Color.BLUE);
 //        staffPanel.
 //pic = new Graphics();   
-
-        Image thisThing = new ImageIcon("images.jpg").getImage();
-        prepareImage(thisThing, staffPanel);
+//        Image thisThing = new ImageIcon("images.jpg").getImage();
+//        prepareImage(thisThing, staffPanel);
 //        staffPanel.
 //        staffPanel.prepareImage(100, 100, "images.jpg", new ImageObserver() {
-
 //            @Override
 //            public boolean imageUpdate(Image img, int infoflags, int x, int y, int width, int height) {
 //                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -474,8 +659,7 @@ chordList.add (chordList.size(), aFlatMin);
 //        pack();
 //         Graphics2D g2d = (Graphics2D)g;
 //         g2d.drawImage(playerImage, WIDTH/2,HEIGHT/2 , this);  
-        staffPanel.repaint();
-
+//        this.repaint();
 //        paintImage();
     }
 
@@ -512,8 +696,7 @@ chordList.add (chordList.size(), aFlatMin);
     @Override
     public void keyReleased(KeyEvent e) {
 //        chord.remove(e.getKeyChar());
-        
-       
+
         if (keyOnePressed == true && keyTwoPressed == true) {
             //System.out.println("you pressed the chord");
             //blob.setText("up down chord played");
@@ -536,6 +719,97 @@ chordList.add (chordList.size(), aFlatMin);
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D graphics = (Graphics2D) (g);
+//		super.paintComponent(g);
+//graphics.
+//        System.out.println(chordTime);
+        graphics.drawString(currentChordName, (int) (this.getBounds().getMaxX() - chordTime * difficulty), 70);
+        // Draw Text
+//		g.drawString("This is my custom Panel!", 10, 20);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        timeFast++;
+        time = (int) timeFast / 10;
+        chordTime++;
+        if (canCountSecond()) {
+            timePassedTextArea.setText("Time:" + (int) howManySeconds());
+            titleLineTextArea.setText("brought to you by Silber Solutions");
+//            System.out.println(time / 10);
+//			paintComponents(this.getGraphics());
+
+            if (time >= 120) {
+                List<Chord> finalList = new ArrayList(chordList.size());
+                List<Chord> chordListCopy = new ArrayList(chordList.size());
+
+                Chord a = new Chord();
+                int k = 0;
+                for (Chord d : chordList) {
+                    k++;
+                    a = d;
+                    System.out.print(d.myName);
+                    chordListCopy.add(d);
+                    System.out.print(chordListCopy.get(k - 1).myName);
+
+                }
+                System.out.println(chordList.size() + "  " + chordListCopy.size());
+                while (!chordListCopy.isEmpty()) { //perform operation until all elements are moved to new List
+
+                    System.out.println("yikes");
+                    double rank = 0;
+                    Chord topNow = new Chord();
+                    int i = 0;
+                    int j = 0;
+                    for (Chord d : chordListCopy) {
+                        i++;
+
+                        if (d.calculateMistakesFrequency() >= rank) {
+//                        if (d.calculateMistakesFrequency()!=null){
+                            rank = d.calculateMistakesFrequency();
+//                        }
+                            topNow = d;
+                            j = i;
+                        }
+
+                    }
+//            if (topNow!=null){
+                    finalList.add(topNow);
+//            }
+                    System.out.println(i);
+                    System.out.println(topNow.myName);
+                    if (j > 0) {
+                        System.out.println(chordListCopy.get(j - 1).myName);
+                        chordListCopy.remove(j - 1);
+                    } else {
+                        chordListCopy.remove(j);
+                    }
+//                chordList.remove(topNow);
+
+                }
+                for (Chord d : finalList) {
+                    if (d.chordCalledCount > 0) {
+                        System.out.println(d.myName + "accuracy: " + d.calculateMistakesFrequency());
+                    }
+                }
+            }
+        }
+        repaint();
+        // TODO Auto-generated method stub
+
+    }
+
+    public double howManySeconds() {
+        double doubleNumber = (double) time / 10;
+        return doubleNumber;
+
+    }
+
+    public boolean canCountSecond() {
+        return (howManySeconds() == (double) (time / 10));
+    }
 //    @Override
 //    public void voiceEvent(Voice voice) {
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -654,5 +928,4 @@ chordList.add (chordList.size(), aFlatMin);
 //        e.getMusicString(); //supposedly will return + for each same note
 ////        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 //    }
-
 }

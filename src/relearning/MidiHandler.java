@@ -98,7 +98,7 @@ public class MidiHandler {
 //            System.out.println(myMsg);
             myMsg = (ShortMessage) msg;
             if (myMsg.getData1() != 0) {
-                int note = placeHolderLesson.arrangeNote((byte)myMsg.getData1());
+                int note = placeHolderLesson.arrangeNote((byte) myMsg.getData1());
                 if (note == (placeHolderLesson.notea)) {
 //        System.out.println("you pressed up");
                     if (myMsg.getData2() != 0) {
@@ -132,15 +132,30 @@ public class MidiHandler {
                         placeHolderLesson.keyFourPressed = false;
                     }
 
-                } else {
+                } else if (placeHolderLesson.chordTime > 100) {
+                    if (myMsg.getData2() !=0){
+                    wrongNote();}
+                    
                 }
-                placeHolderLesson.checkList();
-                System.out.println((myMsg.getData2()));
+
             }
+            placeHolderLesson.checkList();
+//            System.out.println((myMsg.getData2()));
+        }
 
 //              }}
 //      else {};
+        @Override
+        public void close() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
+        
+          public void wrongNote() {
+        placeHolderLesson.wrongNotesCount = placeHolderLesson.wrongNotesCount + 1;
+        placeHolderLesson.wrongNotesCountThisChord = placeHolderLesson.wrongNotesCountThisChord + 1;
+ placeHolderLesson.wrongNotesCountTextArea.setText("Wrong Notes = " + placeHolderLesson.wrongNotesCount);
+          }
+    }
 //    public void close() {}
 //
 //        @Override
@@ -149,9 +164,6 @@ public class MidiHandler {
 //        }
 //    }
 
-        @Override
-        public void close() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-    }
+  
+
 }

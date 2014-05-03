@@ -27,8 +27,30 @@ public class Chord {
     private int dHere;
     public List notes;
     public String myName;
-    public static void main(){
+    public double mistakesNumber;
+    public double mistakesFrequency;
+    public double chordCalledCount;
+    
+    public Chord(){
+this.mistakesNumber=0;
+ this.mistakesFrequency=0;
+ this.chordCalledCount=0;
+}
+    
+    public void raiseChorcCount(){
+        this.chordCalledCount++;
     }
+    public double calculateMistakesFrequency(){
+        this.mistakesFrequency = this.chordCalledCount/(this.chordCalledCount+this.mistakesNumber);
+                return this.mistakesFrequency;
+    }
+    public void addMistakes(int newMistakes){
+       this.mistakesNumber=this.mistakesNumber + newMistakes;
+        
+    }
+
+            
+         
     public void addChord (String name, int a, int b){
 //        notes = new List();
         myName = name;
