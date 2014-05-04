@@ -41,7 +41,7 @@ import javax.swing.*;
  * @author Avi
  */
 public class LessonB extends JPanel implements KeyListener, ActionListener {
-
+int hi;
     boolean keyOnePressed;
     boolean keyTwoPressed;
     boolean keyThreePressed;
