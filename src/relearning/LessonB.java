@@ -181,9 +181,10 @@ public class LessonB extends JPanel implements KeyListener, ActionListener {
     }
 
     public void makeActualChords() {
-//        makeMajorChords();
-//        makeMinorChords();
+        makeMajorChords();
+        makeMinorChords();
         makeSuspendedFourChords();
+        makeSuspendedTwoChords();
     }
 
     public void makeMajorChords() {
