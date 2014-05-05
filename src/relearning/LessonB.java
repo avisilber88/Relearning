@@ -22,11 +22,17 @@ import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.event.*;
 
+import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiEvent;
 import javax.sound.midi.MidiSystem;
@@ -40,7 +46,7 @@ import javax.swing.*;
  *
  * @author Avi
  */
-public class LessonB extends JPanel implements KeyListener, ActionListener {
+public class LessonB extends JPanel implements ImageObserver, KeyListener, ActionListener {
 
     int hi;
     int test2;
@@ -1020,7 +1026,17 @@ public class LessonB extends JPanel implements KeyListener, ActionListener {
 //		super.paintComponent(g);
 //graphics.
 //        System.out.println(chordTime);
-        graphics.drawString(currentChordName, (int) (this.getBounds().getMaxX() - chordTime * difficulty), 70);
+        BufferedImage img;
+        try {
+            img = ImageIO.read(new File ("images.jpg"));
+            graphics.drawImage(img, 5, 100, this);
+        } catch (IOException ex) {
+            Logger.getLogger(LessonB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+                graphics.drawString(currentChordName, (int) (this.getBounds().getMaxX() - chordTime * difficulty), 70);
+                
         // Draw Text
 //		g.drawString("This is my custom Panel!", 10, 20);
     }
