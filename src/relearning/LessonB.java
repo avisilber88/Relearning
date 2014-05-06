@@ -26,6 +26,8 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -63,6 +65,7 @@ public class LessonB extends JPanel implements ImageObserver, KeyListener, Actio
     JPanel staffPanel;
     Map chordSet;
     List<Chord> chordList;
+    BufferedImage img;
     int up = 38;
     int down = 40;
     int left = 37;
@@ -934,6 +937,9 @@ public class LessonB extends JPanel implements ImageObserver, KeyListener, Actio
 //        blob.addKeyListener(this);
 //    blob.setText("hi");
 //        playThis.setEditable(false);
+//        top.add(new ImagePanel());
+         
+         
         blob.setEditable(false);
         blob.grabFocus();
 
@@ -1026,15 +1032,34 @@ public class LessonB extends JPanel implements ImageObserver, KeyListener, Actio
 //		super.paintComponent(g);
 //graphics.
 //        System.out.println(chordTime);
-        BufferedImage img;
+        
+//        try {
+//            
+//            img = ImageIO.read(new File ("staff.jpeg"));
+//            graphics.drawImage(img, 5, 70, null);
+//        } catch (IOException ex) {
+////            Logger.getLogger(LessonB.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        System.out.println(img.);
         try {
-            img = ImageIO.read(new File ("images.jpg"));
-            graphics.drawImage(img, 5, 100, this);
+            URL url;
+            if (currentChordName!=null){
+                System.out.println(currentChordName+".jpeg");
+            
+            url = getClass().getResource(currentChordName+".jpeg");
+            }
+            else{
+          url = getClass().getResource("blank keyboard.jpeg"); 
+            }
+img = ImageIO.read(url);
+       graphics.drawImage(img, 0, 250, this);
+//   img = ImageIO.read(new File("/relearning/staff.jpeg"));
+//            JLabel picLabel = new JLabel(new ImageIcon(img));
+//            window.add(picLabel);
         } catch (IOException ex) {
             Logger.getLogger(LessonB.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
+       
                 graphics.drawString(currentChordName, (int) (this.getBounds().getMaxX() - chordTime * difficulty), 70);
                 
         // Draw Text
