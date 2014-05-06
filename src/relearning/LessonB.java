@@ -1052,7 +1052,9 @@ public class LessonB extends JPanel implements ImageObserver, KeyListener, Actio
           url = getClass().getResource("blank keyboard.jpeg"); 
             }
 img = ImageIO.read(url);
+if (wrongNotesCountThisChord>0){
        graphics.drawImage(img, 0, 250, this);
+}
 //   img = ImageIO.read(new File("/relearning/staff.jpeg"));
 //            JLabel picLabel = new JLabel(new ImageIcon(img));
 //            window.add(picLabel);
