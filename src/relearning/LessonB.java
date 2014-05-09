@@ -48,7 +48,7 @@ import javax.swing.*;
  *
  * @author Avi
  */
-public class LessonB extends JPanel implements ImageObserver, KeyListener, ActionListener {
+public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyListener, ActionListener {
 
     int hi;
     int test2;
@@ -111,6 +111,11 @@ public class LessonB extends JPanel implements ImageObserver, KeyListener, Actio
     //This begins the section that I am testing around with and am not confident in
     Graphics pic;
     Container window;
+       JMenuBar menuBar;
+        JMenu menu, submenu;
+        JMenuItem menuIteem;
+        JCheckBoxMenuItem major, minor, sus, sus2;
+      
 //   static MidiParser bam;
 //    ParserListener bamB;
 //    static Sequence theSequence;
@@ -154,25 +159,56 @@ public class LessonB extends JPanel implements ImageObserver, KeyListener, Actio
     }
 
     public void startGame() {
+//        try{
         MidiHandler chocolate = new MidiHandler();
         chocolate.midMan.setOurLesson(this);
         MidiDevice bamha = chocolate.device;
-        System.out.println(chocolate.device.getDeviceInfo());
+//        System.out.println(chocolate.device.getDeviceInfo());
+//        }
+//        catch ( e){
+
+//        }
 //        bam = new MidiParser();
 //                bam = new MidiParser();
 //bam.parse(theSequence);
 //        bam.addParserListener(bamB);
-
+        menuBar = new JMenuBar();
+        menu = new JMenu("chord options");
+        menu.setMnemonic(KeyEvent.VK_A);
+        menuBar.add(menu);
+//        menu
+//        top.add(menuBar
+        major = new JCheckBoxMenuItem("major");
+        major.setSelected(true);
+        menu.add(major);
+        major.addItemListener(this);
+        minor = new JCheckBoxMenuItem("minor");
+        menu.add(minor);
+        minor.addItemListener(this);
+        sus2 = new JCheckBoxMenuItem("sus2");
+        menu.add(sus2);
+        
+        sus2.addItemListener(this);
+        sus = new JCheckBoxMenuItem("sus");
+        menu.add(sus);
+              
+        sus.addItemListener(this);  
+        top.setJMenuBar(menuBar);
+       
         gameScore = 0;
+        
+startGame2();
+//        chordSet.put(upDown, true);
+//        chordSet.put(leftRight, true);
+    }
+    
+    public void startGame2(){
         chordList = new ArrayList<Chord>(0);
 
         makeActualChords();
         int testVal = 60;
-        System.out.println(testVal + " is really " + arrangeNote((byte) testVal) + " or " + noteNameComplex(testVal));
+//        System.out.println(testVal + " is really " + arrangeNote((byte) testVal) + " or " + noteNameComplex(testVal));
         pickAChord();
-
-//        chordSet.put(upDown, true);
-//        chordSet.put(leftRight, true);
     }
 
     public void makeChords() {
@@ -190,10 +226,18 @@ public class LessonB extends JPanel implements ImageObserver, KeyListener, Actio
     }
 
     public void makeActualChords() {
+        if (major.isSelected()){
         makeMajorChords();
+        }
+        if (minor.isSelected()){
         makeMinorChords();
+        }
+        if (sus.isSelected()){
         makeSuspendedFourChords();
+        }
+        if (sus2.isSelected()){
         makeSuspendedTwoChords();
+        }
     }
 
     public void makeMajorChords() {
@@ -847,7 +891,6 @@ public class LessonB extends JPanel implements ImageObserver, KeyListener, Actio
     }
 
     public void letsMake() { //make the setup and everything
-
         time = 0;
         timeFast = 10;
         chordTime = 0;
@@ -938,8 +981,6 @@ public class LessonB extends JPanel implements ImageObserver, KeyListener, Actio
 //    blob.setText("hi");
 //        playThis.setEditable(false);
 //        top.add(new ImagePanel());
-         
-         
         blob.setEditable(false);
         blob.grabFocus();
 
@@ -1032,7 +1073,7 @@ public class LessonB extends JPanel implements ImageObserver, KeyListener, Actio
 //		super.paintComponent(g);
 //graphics.
 //        System.out.println(chordTime);
-        
+
 //        try {
 //            
 //            img = ImageIO.read(new File ("staff.jpeg"));
@@ -1043,27 +1084,26 @@ public class LessonB extends JPanel implements ImageObserver, KeyListener, Actio
 //        System.out.println(img.);
         try {
             URL url;
-            if (currentChordName!=null){
-                System.out.println(currentChordName+".jpeg");
-            
-            url = getClass().getResource(currentChordName+".jpeg");
+            if (currentChordName != null) {
+//                System.out.println(currentChordName + ".jpeg");
+
+                url = getClass().getResource(currentChordName + ".jpeg");
+            } else {
+                url = getClass().getResource("blank keyboard.jpeg");
             }
-            else{
-          url = getClass().getResource("blank keyboard.jpeg"); 
+            img = ImageIO.read(url);
+            if (wrongNotesCountThisChord > 0) {
+                graphics.drawImage(img, 0, 250, this);
             }
-img = ImageIO.read(url);
-if (wrongNotesCountThisChord>0){
-       graphics.drawImage(img, 0, 250, this);
-}
 //   img = ImageIO.read(new File("/relearning/staff.jpeg"));
 //            JLabel picLabel = new JLabel(new ImageIcon(img));
 //            window.add(picLabel);
         } catch (IOException ex) {
             Logger.getLogger(LessonB.class.getName()).log(Level.SEVERE, null, ex);
         }
-       
-                graphics.drawString(currentChordName, (int) (this.getBounds().getMaxX() - chordTime * difficulty), 70);
-                
+
+        graphics.drawString(currentChordName, (int) (this.getBounds().getMaxX() - chordTime * difficulty), 30);
+
         // Draw Text
 //		g.drawString("This is my custom Panel!", 10, 20);
     }
@@ -1088,15 +1128,15 @@ if (wrongNotesCountThisChord>0){
                 for (Chord d : chordList) {
                     k++;
                     a = d;
-                    System.out.print(d.myName);
+//                    System.out.print(d.myName);
                     chordListCopy.add(d);
-                    System.out.print(chordListCopy.get(k - 1).myName);
+//                    System.out.print(chordListCopy.get(k - 1).myName);
 
                 }
-                System.out.println(chordList.size() + "  " + chordListCopy.size());
+//                System.out.println(chordList.size() + "  " + chordListCopy.size());
                 while (!chordListCopy.isEmpty()) { //perform operation until all elements are moved to new List
 
-                    System.out.println("yikes");
+//                    System.out.println("yikes");
                     double rank = 0;
                     Chord topNow = new Chord();
                     int i = 0;
@@ -1116,10 +1156,10 @@ if (wrongNotesCountThisChord>0){
 //            if (topNow!=null){
                     finalList.add(topNow);
 //            }
-                    System.out.println(i);
-                    System.out.println(topNow.myName);
+//                    System.out.println(i);
+//                    System.out.println(topNow.myName);
                     if (j > 0) {
-                        System.out.println(chordListCopy.get(j - 1).myName);
+//                        System.out.println(chordListCopy.get(j - 1).myName);
                         chordListCopy.remove(j - 1);
                     } else {
                         chordListCopy.remove(j);
@@ -1129,7 +1169,7 @@ if (wrongNotesCountThisChord>0){
                 }
                 for (Chord d : finalList) {
                     if (d.chordCalledCount > 0) {
-                        System.out.println(d.myName + "accuracy: " + d.calculateMistakesFrequency());
+//                        System.out.println(d.myName + "accuracy: " + d.calculateMistakesFrequency());
                     }
                 }
             }
@@ -1152,12 +1192,22 @@ if (wrongNotesCountThisChord>0){
     public int addHalfSteps(int incomingNumber, int addThisMany) {
         int c = incomingNumber + addThisMany;
 //int e = incomingNumber + addThisMany;
-       while (c>12){
-           c=c-12;
-            
+        while (c > 12) {
+            c = c - 12;
+
 //            System.out.println(d);
         }
         return c;
+    }
+     @Override
+    public void itemStateChanged(ItemEvent e) {
+//      
+//      System.out.println("You pressed something");
+       this.startGame2();
+        
+        
+        
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 //    @Override
 //    public void voiceEvent(Voice voice) {
@@ -1277,4 +1327,6 @@ if (wrongNotesCountThisChord>0){
 //        e.getMusicString(); //supposedly will return + for each same note
 ////        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 //    }
+
+   
 }
