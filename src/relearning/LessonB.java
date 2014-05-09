@@ -50,6 +50,7 @@ import javax.swing.*;
  */
 public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyListener, ActionListener {
 
+    int currentPlayedCorrect;
     int hi;
     int test2;
     int test3;
@@ -111,17 +112,16 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
     //This begins the section that I am testing around with and am not confident in
     Graphics pic;
     Container window;
-       JMenuBar menuBar;
-        JMenu menu, submenu;
-        JMenuItem menuIteem;
-        JCheckBoxMenuItem major, minor, sus, sus2;
-      
+    JMenuBar menuBar;
+    JMenu menu, submenu;
+    JMenuItem menuIteem;
+    JCheckBoxMenuItem major, minor, sus, sus2, majorSeventh, minorSeventh, dominantSeventh;
+
 //   static MidiParser bam;
 //    ParserListener bamB;
 //    static Sequence theSequence;
 //    static DeviceThatWillTransmitMidi keyBoard;
 //This ends the section that I am testing around with and am not confident in
-
     public LessonB() {
         difficultyAddative = .02;
         difficulty = 1;
@@ -146,7 +146,7 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
 //        theSequence = music;
         top.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        letsMake();
+        letsMakeNew();
         startGame();
     }
 
@@ -187,22 +187,35 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
         minor.addItemListener(this);
         sus2 = new JCheckBoxMenuItem("sus2");
         menu.add(sus2);
-        
+
         sus2.addItemListener(this);
         sus = new JCheckBoxMenuItem("sus");
         menu.add(sus);
-              
-        sus.addItemListener(this);  
+
+        sus.addItemListener(this);
+        minorSeventh = new JCheckBoxMenuItem("minorSeventh");
+        menu.add(minorSeventh);
+
+        minorSeventh.addItemListener(this);
+        majorSeventh = new JCheckBoxMenuItem("majorSeventh");
+        menu.add(majorSeventh);
+
+        majorSeventh.addItemListener(this);
+        dominantSeventh = new JCheckBoxMenuItem("dominantSeventh");
+        menu.add(dominantSeventh);
+
+        dominantSeventh.addItemListener(this);
+
         top.setJMenuBar(menuBar);
-       
+
         gameScore = 0;
-        
-startGame2();
+
+        startGame2();
 //        chordSet.put(upDown, true);
 //        chordSet.put(leftRight, true);
     }
-    
-    public void startGame2(){
+
+    public void startGame2() {
         chordList = new ArrayList<Chord>(0);
 
         makeActualChords();
@@ -226,18 +239,28 @@ startGame2();
     }
 
     public void makeActualChords() {
-        if (major.isSelected()){
-        makeMajorChords();
+        if (major.isSelected()) {
+            makeMajorChords();
         }
-        if (minor.isSelected()){
-        makeMinorChords();
+        if (minor.isSelected()) {
+            makeMinorChords();
         }
-        if (sus.isSelected()){
-        makeSuspendedFourChords();
+        if (sus.isSelected()) {
+            makeSuspendedFourChords();
         }
-        if (sus2.isSelected()){
-        makeSuspendedTwoChords();
+        if (sus2.isSelected()) {
+            makeSuspendedTwoChords();
         }
+        if (minorSeventh.isSelected()) {
+            makeMinorSeventhChords();
+        }
+        if (majorSeventh.isSelected()) {
+            makeMajorSeventhChords();
+        }
+        if (dominantSeventh.isSelected()) {
+            makeDominantSeventhChords();
+        }
+
     }
 
     public void makeMajorChords() {
@@ -726,7 +749,7 @@ startGame2();
         randomNum = rn.nextInt((maximum - minimum)) + minimum;
         currentChordName = chordList.get(randomNum).myName;
         currentChord = chordList.get(randomNum);
-        playThis.setText(currentChordName);
+//        playThis.setText(currentChordName);
         chordTime = 0;
         difficulty = difficulty + difficultyAddative;
         notesIn = chordList.get(randomNum).notes;
@@ -858,31 +881,32 @@ startGame2();
     }
 
     public void checkList() { // did u play right chord?
-        int score = 0;
+        currentPlayedCorrect = 0;
         if (keyOnePressed == true) {
-            score++;
+            currentPlayedCorrect++;
         }
         if (keyTwoPressed == true) {
-            score++;
+            currentPlayedCorrect++;
         }
         if (keyThreePressed == true) {
-            score++;
+            currentPlayedCorrect++;
         }
         if (keyFourPressed == true) {
-            score++;
+            currentPlayedCorrect++;
         }
-        if (score == notesIn.size()) {
+        if (currentPlayedCorrect == notesIn.size()) {
 //            System.out.println("You Win!!");
 
             gameScore = gameScore + 1;
-            scoreSheetTextArea.setText("Your score is " + gameScore);
+//            scoreSheetTextArea.setText("Your score is " + gameScore);
+            repaint();
             currentChord.addMistakes(wrongNotesCountThisChord);
             currentChord.raiseChorcCount();
             wrongNotesCountThisChord = 0;
             pickAChord();
         }
-
-        blob.setText(numToString(score));
+        repaint();
+//        blob.setText(numToString(score));
     }
 
     public String numToString(int a) {
@@ -1011,6 +1035,23 @@ startGame2();
 //        paintImage();
     }
 
+    public void letsMakeNew() {
+        time = 0;
+        timeFast = 10;
+        chordTime = 0;
+//        timer = new Timer(100, this);
+//        timer.start();
+        chordTimer = new Timer(10, this);
+        chordTimer.start();
+        // this.paint(shape);
+//		frame = new JFrame();
+        top.setSize(500, 500);
+        Rectangle shape = new Rectangle(5, 5, 5, 5);
+        top.setContentPane(this);
+        window = top.getContentPane();
+        top.setVisible(true);
+    }
+
     @Override
 
     public void keyTyped(KeyEvent e) {
@@ -1070,6 +1111,11 @@ startGame2();
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D graphics = (Graphics2D) (g);
+
+        graphics.drawString("Time:" + (int) howManySeconds(), this.getWidth() / 2, this.getHeight() - 20);
+        graphics.drawString(("Score: " + numToString(currentPlayedCorrect)), this.getWidth() / 4, this.getHeight() - 20);
+        graphics.drawString(("Current Chord: " + currentChordName), (int) this.getBounds().getMinX() + 20, this.getHeight() / 5);
+        graphics.drawString(("Wrong Notes = " + wrongNotesCount), (int) (this.getWidth() * .75), this.getHeight() - 20);
 //		super.paintComponent(g);
 //graphics.
 //        System.out.println(chordTime);
@@ -1092,30 +1138,43 @@ startGame2();
                 url = getClass().getResource("blank keyboard.jpeg");
             }
             img = ImageIO.read(url);
-            if (wrongNotesCountThisChord > 0) {
-                graphics.drawImage(img, 0, 250, this);
+            if (wrongNotesCountThisChord > 0) //                img
+            {
+                graphics.drawImage(img, (this.getWidth() - img.getWidth()) / 2, this.getHeight() - (img.getHeight() + 40), this);
             }
+        }
 //   img = ImageIO.read(new File("/relearning/staff.jpeg"));
 //            JLabel picLabel = new JLabel(new ImageIcon(img));
 //            window.add(picLabel);
-        } catch (IOException ex) {
-            Logger.getLogger(LessonB.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    
+    catch (IOException ex
 
-        graphics.drawString(currentChordName, (int) (this.getBounds().getMaxX() - chordTime * difficulty), 30);
+    
+        ) {
+            Logger.getLogger(LessonB.class.getName()).log(Level.SEVERE, null, ex);
+    }
+
+    graphics.drawString (currentChordName,
+            
+    (int
+
+    ) (this.getBounds()
+
+
+.getMaxX() - chordTime * difficulty), this.getHeight()/5-20);
 
         // Draw Text
 //		g.drawString("This is my custom Panel!", 10, 20);
-    }
-
+    
+}
     @Override
-    public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e) {
         timeFast++;
         time = (int) timeFast / 10;
         chordTime++;
         if (canCountSecond()) {
-            timePassedTextArea.setText("Time:" + (int) howManySeconds());
-            titleLineTextArea.setText("brought to you by Silber Solutions");
+//            timePassedTextArea.setText("Time:" + (int) howManySeconds());
+//            titleLineTextArea.setText("brought to you by Silber Solutions");
 //            System.out.println(time / 10);
 //			paintComponents(this.getGraphics());
 
@@ -1169,7 +1228,7 @@ startGame2();
                 }
                 for (Chord d : finalList) {
                     if (d.chordCalledCount > 0) {
-//                        System.out.println(d.myName + "accuracy: " + d.calculateMistakesFrequency());
+                        System.out.println(d.myName + "accuracy: " + d.calculateMistakesFrequency());
                     }
                 }
             }
@@ -1199,14 +1258,13 @@ startGame2();
         }
         return c;
     }
-     @Override
-    public void itemStateChanged(ItemEvent e) {
+
+    @Override
+        public void itemStateChanged(ItemEvent e) {
 //      
 //      System.out.println("You pressed something");
-       this.startGame2();
-        
-        
-        
+        this.startGame2();
+
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 //    @Override
@@ -1328,5 +1386,4 @@ startGame2();
 ////        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 //    }
 
-   
 }
