@@ -13,6 +13,7 @@ package relearning;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
@@ -175,45 +176,7 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
 //                bam = new MidiParser();
 //bam.parse(theSequence);
 //        bam.addParserListener(bamB);
-        menuBar = new JMenuBar();
-        menu = new JMenu("chord options");
-        menu.setMnemonic(KeyEvent.VK_A);
-        menuBar.add(menu);
-//        menu
-//        top.add(menuBar
-        justNotes = new JCheckBoxMenuItem("Just Learn Notes");
-
-        major = new JCheckBoxMenuItem("major");
-        justNotes.setSelected(true);
-        justNotes.addItemListener(this);
-        menu.add(justNotes);
-        menu.add(major);
-        major.addItemListener(this);
-        minor = new JCheckBoxMenuItem("minor");
-        menu.add(minor);
-        minor.addItemListener(this);
-        sus2 = new JCheckBoxMenuItem("sus2");
-        menu.add(sus2);
-
-        sus2.addItemListener(this);
-        sus = new JCheckBoxMenuItem("sus");
-        menu.add(sus);
-
-        sus.addItemListener(this);
-        minorSeventh = new JCheckBoxMenuItem("minorSeventh");
-        menu.add(minorSeventh);
-
-        minorSeventh.addItemListener(this);
-        majorSeventh = new JCheckBoxMenuItem("majorSeventh");
-        menu.add(majorSeventh);
-
-        majorSeventh.addItemListener(this);
-        dominantSeventh = new JCheckBoxMenuItem("dominantSeventh");
-        menu.add(dominantSeventh);
-
-        dominantSeventh.addItemListener(this);
-
-        top.setJMenuBar(menuBar);
+      
 
 //scroller.setB
         gameScore = 0;
@@ -1122,6 +1085,45 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
             frequencyScroller = new JScrollPane(scoreFrequencyText);
 
             bob.add(frequencyScroller);
+              menuBar = new JMenuBar();
+        menu = new JMenu("chord options");
+        menu.setMnemonic(KeyEvent.VK_A);
+        menuBar.add(menu);
+//        menu
+//        top.add(menuBar
+        justNotes = new JCheckBoxMenuItem("Just Learn Notes");
+
+        major = new JCheckBoxMenuItem("major");
+        justNotes.setSelected(true);
+        justNotes.addItemListener(this);
+        menu.add(justNotes);
+        menu.add(major);
+        major.addItemListener(this);
+        minor = new JCheckBoxMenuItem("minor");
+        menu.add(minor);
+        minor.addItemListener(this);
+        sus2 = new JCheckBoxMenuItem("sus2");
+        menu.add(sus2);
+
+        sus2.addItemListener(this);
+        sus = new JCheckBoxMenuItem("sus");
+        menu.add(sus);
+
+        sus.addItemListener(this);
+        minorSeventh = new JCheckBoxMenuItem("minorSeventh");
+        menu.add(minorSeventh);
+
+        minorSeventh.addItemListener(this);
+        majorSeventh = new JCheckBoxMenuItem("majorSeventh");
+        menu.add(majorSeventh);
+
+        majorSeventh.addItemListener(this);
+        dominantSeventh = new JCheckBoxMenuItem("dominantSeventh");
+        menu.add(dominantSeventh);
+
+        dominantSeventh.addItemListener(this);
+
+        top.setJMenuBar(menuBar);
         top.setVisible(true);
     }
 
@@ -1183,6 +1185,7 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+//        g.setFont("TimesRoman", Font.PLAIN, 12);
         Graphics2D graphics = (Graphics2D) (g);
 
         graphics.drawString("Time:" + (int) howManySeconds(), this.getWidth() / 2, this.getHeight() - 20);
