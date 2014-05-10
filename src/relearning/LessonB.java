@@ -30,9 +30,11 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Formatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -51,10 +53,12 @@ import javax.swing.*;
  */
 public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyListener, ActionListener {
 
+    double bestDifficulty;
     int currentPlayedCorrect;
     int hi;
     int test2;
     int test3;
+    double allTimeBestDifficulty;
     JScrollPane frequencyScroller;
     JTextArea scoreFrequencyText;
     boolean keyOnePressed;
@@ -107,6 +111,7 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
     double timeFast;
     double difficulty;
     double difficultyAddative;
+    double maxDifficulty;
     JTextArea timePassedTextArea;
     JTextArea titleLineTextArea;
     JTextArea wrongNotesCountTextArea;
@@ -120,14 +125,17 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
     JMenu menu, submenu;
     JMenuItem menuIteem;
     JCheckBoxMenuItem justNotes, major, minor, sus, sus2, majorSeventh, minorSeventh, dominantSeventh;
-
+    Formatter highScoreFormatter;
+    File highScoreFile;
+    Scanner highScoreScanner;
 //   static MidiParser bam;
 //    ParserListener bamB;
 //    static Sequence theSequence;
 //    static DeviceThatWillTransmitMidi keyBoard;
 //This ends the section that I am testing around with and am not confident in
+
     public LessonB() {
-        difficultyAddative = .02;
+        difficultyAddative = .05;
         difficulty = 1;
         currentChordName = "";
         wrongNotesCount = 0;
@@ -163,10 +171,15 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
     }
 
     public void startGame() {
-//        try{
+//        try
+try {
         MidiHandler chocolate = new MidiHandler();
         chocolate.midMan.setOurLesson(this);
         MidiDevice bamha = chocolate.device;
+}
+catch (Exception e) {
+    
+}
 //        System.out.println(chocolate.device.getDeviceInfo());
 //        }
 //        catch ( e){
@@ -176,10 +189,9 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
 //                bam = new MidiParser();
 //bam.parse(theSequence);
 //        bam.addParserListener(bamB);
-      
-
 //scroller.setB
         gameScore = 0;
+        bestDifficulty = 1;
 
         startGame2();
 //        chordSet.put(upDown, true);
@@ -777,11 +789,20 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
         int minimum = 0;
         Random rn = new Random();
         randomNum = rn.nextInt((maximum - minimum)) + minimum;
+        if ((this.wrongNotesCountThisChord == 0) && ((this.getBounds().getMaxX() - chordTime * difficulty) > 0)) {
+            difficulty = difficulty + difficultyAddative;
+        } else {
+            if (difficulty > 1) {
+                difficulty = difficulty - difficultyAddative;
+            }
+        }
+        wrongNotesCountThisChord = 0;
+
         currentChordName = chordList.get(randomNum).myName;
         currentChord = chordList.get(randomNum);
 //        playThis.setText(currentChordName);
         chordTime = 0;
-        difficulty = difficulty + difficultyAddative;
+
         notesIn = chordList.get(randomNum).notes;
         System.out.println(notesIn.size());
         if (notesIn.size() > 0) {
@@ -933,7 +954,6 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
             repaint();
             currentChord.addMistakes(wrongNotesCountThisChord);
             currentChord.raiseChorcCount();
-            wrongNotesCountThisChord = 0;
             pickAChord();
         }
         repaint();
@@ -1080,12 +1100,12 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
         Rectangle shape = new Rectangle(5, 5, 5, 5);
         top.setContentPane(this);
         window = top.getContentPane();
-                    scoreFrequencyText = new JTextArea(50,150 ); 
-            bob = top.getContentPane();
-            frequencyScroller = new JScrollPane(scoreFrequencyText);
+        scoreFrequencyText = new JTextArea(50, 150);
+        bob = top.getContentPane();
+        frequencyScroller = new JScrollPane(scoreFrequencyText);
 
-            bob.add(frequencyScroller);
-              menuBar = new JMenuBar();
+        bob.add(frequencyScroller);
+        menuBar = new JMenuBar();
         menu = new JMenu("chord options");
         menu.setMnemonic(KeyEvent.VK_A);
         menuBar.add(menu);
@@ -1185,14 +1205,93 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-//        g.setFont("TimesRoman", Font.PLAIN, 12);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 12));
         Graphics2D graphics = (Graphics2D) (g);
+//Font thisFont = new Font("TimesRoman");
+        int difficultyCount = (int) (difficulty * 1000);
+        double difficultyRounded = difficultyCount / 1000.0;
+        if (difficultyRounded > bestDifficulty) {
+            bestDifficulty = difficultyRounded;
 
-        graphics.drawString("Time:" + (int) howManySeconds(), this.getWidth() / 2, this.getHeight() - 20);
-        graphics.drawString(("Current Correct Notes: " + numToString(currentPlayedCorrect)), this.getWidth() / 4, this.getHeight() - 20);
-        graphics.drawString(("Current Chord: " + currentChordName), (int) this.getBounds().getMinX() + 20, this.getHeight() / 5);
-        graphics.drawString(("Wrong Notes = " + wrongNotesCount), (int) (this.getWidth() * .75), this.getHeight() - 20);
-        graphics.drawString(("Your score is " + gameScore), 20, this.getHeight() - 20);
+            highScoreFile = new File("highScore.txt");
+            if (!highScoreFile.exists()) {
+                try {
+                    highScoreFormatter = new Formatter("highScore.txt");
+                    System.out.println("made a file");
+                } catch (Exception e) {
+                    System.out.println("Formatter's busted homie");
+                }
+                highScoreFormatter.format("%s", bestDifficulty);
+                highScoreFormatter.close();
+            } else {
+            }
+            try {
+                highScoreScanner = new Scanner((highScoreFile));
+                System.out.println(highScoreFile.getPath());
+            } catch (Exception e) {
+                System.out.println("scanner's busted homie");
+            }
+Double value = bestDifficulty;
+            while (highScoreScanner.hasNext()) {
+                String a = highScoreScanner.next();
+                value = Double.parseDouble(a);
+                
+            System.out.println("test1 " + value);
+
+            };
+            System.out.println("test2 " + value);
+ if (value<bestDifficulty){
+      try {
+                    highScoreFormatter = new Formatter("highScore.txt");
+                    System.out.println("made a file");
+                } catch (Exception e) {
+                    System.out.println("Formatter's busted homie");
+                }
+                highScoreFormatter.format("%s", bestDifficulty);
+                highScoreFormatter.close();
+     
+        }
+
+    }
+
+    graphics.drawString (
+            
+
+    "Best Difficulty: " + bestDifficulty, this.getWidth() - 110, 20);
+        graphics.drawString (
+            
+
+    "Difficulty: " + difficultyRounded, 0, 20);
+        graphics.drawString (
+            
+    "Time:" + (int
+
+    ) howManySeconds()
+
+    , this.getWidth() / 2, this.getHeight() - 20);
+        graphics.drawString (
+            
+
+    ("Current Correct Notes: " + numToString(currentPlayedCorrect)), this.getWidth() / 4, this.getHeight() - 20);
+        graphics.drawString (
+            
+    ("Current Chord: " + currentChordName), (int
+
+    ) this.getBounds()
+
+    .getMinX() + 20, this.getHeight() / 5);
+        graphics.drawString (
+            
+    ("Wrong Notes = " + wrongNotesCount), (int
+
+    ) (this.getWidth()
+
+    * .75), this.getHeight() - 20);
+        graphics.drawString (
+            
+
+    
+        ("Your score is " + gameScore), 20, this.getHeight() - 20);
 //graphics.
 
 //		super.paintComponent(g);
@@ -1208,45 +1307,70 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
 //        System.out.println(img.);
         try {
             URL url;
-            if (currentChordName != null) {
+        if (currentChordName != null) {
 //                System.out.println(currentChordName + ".jpeg");
 
-                url = getClass().getResource(currentChordName + ".jpeg");
-            } else {
-                url = getClass().getResource("blank keyboard.jpeg");
-            }
-            img = ImageIO.read(url);
-            BufferedImage blankImage= ImageIO.read(getClass().getResource("Blank Keyboard.jpeg"));
-            int imgHeight = (int) ((this.getWidth() - 20) * ((double) 163.0 / 440));
-            int imgWidth = this.getWidth() - 20;
-
-            frequencyScroller.setBounds(10, (this.getHeight() / 5) + 10, 150, this.getHeight()-((imgHeight+60)+(this.getHeight()/5)));
-            if (wrongNotesCountThisChord > 0) //                img
-            {
-
-                graphics.drawImage(img, 10, this.getHeight() - (imgHeight + 40), this.getWidth() - 20, imgHeight, this);
-//            this.getWidth() - img.getWidth()) / 2?
-            }
-            else{
-                graphics.drawImage(blankImage, 10, this.getHeight() - (imgHeight + 40), this.getWidth() - 20, imgHeight, this);
-            }
-        } //   img = ImageIO.read(new File("/relearning/staff.jpeg"));
-        //            JLabel picLabel = new JLabel(new ImageIcon(img));
-        //            window.add(picLabel);
-        catch (IOException ex) {
-            Logger.getLogger(LessonB.class.getName()).log(Level.SEVERE, null, ex);
+            url = getClass().getResource(currentChordName + ".jpeg");
+        } else {
+            url = getClass().getResource("blank keyboard.jpeg");
         }
+        img = ImageIO.read(url);
+        BufferedImage blankImage = ImageIO.read(getClass().getResource("Blank Keyboard.jpeg"));
+        BufferedImage staff = ImageIO.read(getClass().getResource("staff.jpeg"));
+        int imgHeight = (int) ((this.getWidth() - 20) * ((double) 163.0 / 440));
+        int imgWidth = this.getWidth() - 20;
+        int staffWidth = ((this.getWidth() - 180));
+        int staffHeight = (int) (staffWidth * ((double) 162.0 / 310));
+        frequencyScroller.setBounds(10, (this.getHeight() / 5) + 10, 150, this.getHeight() - ((imgHeight + 60) + (this.getHeight() / 5)));
+//           graphics.drawImage(staff, 170,((this.getHeight() / 5) + 10), staffWidth, staffHeight, this);
 
-        graphics.drawString(currentChordName,
-                (int) (this.getBounds()
-                .getMaxX() - chordTime * difficulty), this.getHeight() / 5 - 20);
+        int eLine = this.getHeight() - (imgHeight + 50);
+        int fLine = (this.getHeight() / 5);
+        int gLine = fLine + (int) ((eLine - fLine) * .75);
+        int bLine = fLine + (int) ((eLine - fLine) * .5);
+        int dLine = fLine + (int) ((eLine - fLine) * .25);
+
+        graphics.drawLine(170, eLine, this.getWidth(), eLine);
+        graphics.drawLine(170, gLine, this.getWidth(), gLine);
+        graphics.drawLine(170, bLine, this.getWidth(), bLine);
+        graphics.drawLine(170, dLine, this.getWidth(), dLine);
+        graphics.drawLine(170, fLine, this.getWidth(), fLine);
+        if (wrongNotesCountThisChord > 0) //                img
+        {
+
+            graphics.drawImage(img, 10, this.getHeight() - (imgHeight + 40), this.getWidth() - 20, imgHeight, this);
+//            this.getWidth() - img.getWidth()) / 2?
+        } else {
+            graphics.drawImage(blankImage, 10, this.getHeight() - (imgHeight + 40), this.getWidth() - 20, imgHeight, this);
+        }
+    } //   img = ImageIO.read(new File("/relearning/staff.jpeg"));
+    //            JLabel picLabel = new JLabel(new ImageIcon(img));
+    //            window.add(picLabel);
+    catch (IOException ex
+
+    
+        ) {
+            Logger.getLogger(LessonB.class.getName()).log(Level.SEVERE, null, ex);
+    }
+
+    g.setFont (
+            
+
+    new Font("TimesRoman", Font.BOLD, 16));
+        graphics.drawString (currentChordName,
+            
+    (int
+
+    ) (this.getBounds()
+
+.getMaxX() - chordTime * difficulty), this.getHeight() / 5 - 20);
 
         // Draw Text
 //		g.drawString("This is my custom Panel!", 10, 20);
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e) {
         timeFast++;
         time = (int) timeFast / 10;
         chordTime++;
@@ -1304,13 +1428,13 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
 //                chordList.remove(topNow);
 
                 }
-                
+
                 String sendOut = "";
                 for (Chord d : finalList) {
-                    
+
                     if (d.chordCalledCount > 0) {
-                        sendOut=sendOut+ "\r\n "+ d.myName + " acc: " + (int)(100*d.calculateMistakesFrequency())+"%";
-                        
+                        sendOut = sendOut + "\r\n " + d.myName + " acc: " + (int) (100 * d.calculateMistakesFrequency()) + "%";
+
                         scoreFrequencyText.setText(sendOut);
                     }
                 }
@@ -1343,7 +1467,7 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
     }
 
     @Override
-    public void itemStateChanged(ItemEvent e) {
+        public void itemStateChanged(ItemEvent e) {
 //      
 //      System.out.println("You pressed something");
         this.startGame2();
