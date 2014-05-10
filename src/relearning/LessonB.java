@@ -54,6 +54,8 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
     int hi;
     int test2;
     int test3;
+    JScrollPane frequencyScroller;
+    JTextArea scoreFrequencyText;
     boolean keyOnePressed;
     boolean keyTwoPressed;
     boolean keyThreePressed;
@@ -112,6 +114,7 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
     //This begins the section that I am testing around with and am not confident in
     Graphics pic;
     Container window;
+    Container bob;
     JMenuBar menuBar;
     JMenu menu, submenu;
     JMenuItem menuIteem;
@@ -179,7 +182,7 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
 //        menu
 //        top.add(menuBar
         justNotes = new JCheckBoxMenuItem("Just Learn Notes");
-        
+
         major = new JCheckBoxMenuItem("major");
         justNotes.setSelected(true);
         justNotes.addItemListener(this);
@@ -212,6 +215,7 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
 
         top.setJMenuBar(menuBar);
 
+//scroller.setB
         gameScore = 0;
 
         startGame2();
@@ -223,7 +227,7 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
         chordList = new ArrayList<Chord>(0);
 
         makeActualChords();
-        int testVal = 60;
+        int testVal = 10;
 //        System.out.println(testVal + " is really " + arrangeNote((byte) testVal) + " or " + noteNameComplex(testVal));
         pickAChord();
     }
@@ -299,9 +303,9 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
     }
 
     public void makeActualChords() {
-if (justNotes.isSelected()){
-    makeNotes();
-}
+        if (justNotes.isSelected()) {
+            makeNotes();
+        }
         if (major.isSelected()) {
             makeMajorChords();
         }
@@ -1113,6 +1117,11 @@ if (justNotes.isSelected()){
         Rectangle shape = new Rectangle(5, 5, 5, 5);
         top.setContentPane(this);
         window = top.getContentPane();
+                    scoreFrequencyText = new JTextArea(50,150 ); 
+            bob = top.getContentPane();
+            frequencyScroller = new JScrollPane(scoreFrequencyText);
+
+            bob.add(frequencyScroller);
         top.setVisible(true);
     }
 
@@ -1181,10 +1190,11 @@ if (justNotes.isSelected()){
         graphics.drawString(("Current Chord: " + currentChordName), (int) this.getBounds().getMinX() + 20, this.getHeight() / 5);
         graphics.drawString(("Wrong Notes = " + wrongNotesCount), (int) (this.getWidth() * .75), this.getHeight() - 20);
         graphics.drawString(("Your score is " + gameScore), 20, this.getHeight() - 20);
+//graphics.
+
 //		super.paintComponent(g);
 //graphics.
 //        System.out.println(chordTime);
-
 //        try {
 //            
 //            img = ImageIO.read(new File ("staff.jpeg"));
@@ -1203,9 +1213,19 @@ if (justNotes.isSelected()){
                 url = getClass().getResource("blank keyboard.jpeg");
             }
             img = ImageIO.read(url);
+            BufferedImage blankImage= ImageIO.read(getClass().getResource("Blank Keyboard.jpeg"));
+            int imgHeight = (int) ((this.getWidth() - 20) * ((double) 163.0 / 440));
+            int imgWidth = this.getWidth() - 20;
+
+            frequencyScroller.setBounds(10, (this.getHeight() / 5) + 10, 150, this.getHeight()-((imgHeight+60)+(this.getHeight()/5)));
             if (wrongNotesCountThisChord > 0) //                img
             {
-                graphics.drawImage(img, (this.getWidth() - img.getWidth()) / 2, this.getHeight() - (img.getHeight() + 40), this);
+
+                graphics.drawImage(img, 10, this.getHeight() - (imgHeight + 40), this.getWidth() - 20, imgHeight, this);
+//            this.getWidth() - img.getWidth()) / 2?
+            }
+            else{
+                graphics.drawImage(blankImage, 10, this.getHeight() - (imgHeight + 40), this.getWidth() - 20, imgHeight, this);
             }
         } //   img = ImageIO.read(new File("/relearning/staff.jpeg"));
         //            JLabel picLabel = new JLabel(new ImageIcon(img));
@@ -1233,7 +1253,7 @@ if (justNotes.isSelected()){
 //            System.out.println(time / 10);
 //			paintComponents(this.getGraphics());
 
-            if (time >= 120) {
+            if (time >= 0) {
                 List<Chord> finalList = new ArrayList(chordList.size());
                 List<Chord> chordListCopy = new ArrayList(chordList.size());
 
@@ -1281,9 +1301,14 @@ if (justNotes.isSelected()){
 //                chordList.remove(topNow);
 
                 }
+                
+                String sendOut = "";
                 for (Chord d : finalList) {
+                    
                     if (d.chordCalledCount > 0) {
-                        System.out.println(d.myName + "accuracy: " + d.calculateMistakesFrequency());
+                        sendOut=sendOut+ "\r\n "+ d.myName + " acc: " + (int)(100*d.calculateMistakesFrequency())+"%";
+                        
+                        scoreFrequencyText.setText(sendOut);
                     }
                 }
             }
