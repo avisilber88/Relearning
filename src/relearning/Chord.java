@@ -49,7 +49,14 @@ this.mistakesNumber=0;
         
     }
 
-            
+               public void addChord (String name, int a) {
+        myName = name;
+        notes = new ArrayList(1);
+//        System.out.println(notes.isEmpty());
+        aHere=a;
+        notes.add(0, a);
+        
+    }
          
     public void addChord (String name, int a, int b){
 //        notes = new List();

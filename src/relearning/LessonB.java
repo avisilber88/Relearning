@@ -115,7 +115,7 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
     JMenuBar menuBar;
     JMenu menu, submenu;
     JMenuItem menuIteem;
-    JCheckBoxMenuItem major, minor, sus, sus2, majorSeventh, minorSeventh, dominantSeventh;
+    JCheckBoxMenuItem justNotes, major, minor, sus, sus2, majorSeventh, minorSeventh, dominantSeventh;
 
 //   static MidiParser bam;
 //    ParserListener bamB;
@@ -178,8 +178,12 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
         menuBar.add(menu);
 //        menu
 //        top.add(menuBar
+        justNotes = new JCheckBoxMenuItem("Just Learn Notes");
+        
         major = new JCheckBoxMenuItem("major");
-        major.setSelected(true);
+        justNotes.setSelected(true);
+        justNotes.addItemListener(this);
+        menu.add(justNotes);
         menu.add(major);
         major.addItemListener(this);
         minor = new JCheckBoxMenuItem("minor");
@@ -224,6 +228,62 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
         pickAChord();
     }
 
+    public void makeNotes() {
+        Chord aNotes = new Chord();
+        Chord bNotes = new Chord();
+        Chord cNotes = new Chord();
+        Chord dNotes = new Chord();
+        Chord eNotes = new Chord();
+        Chord fNotes = new Chord();
+        Chord gNotes = new Chord();
+        Chord aFlatNotes = new Chord();
+        Chord aSharpNotes = new Chord();
+        Chord bFlatNotes = new Chord();
+        Chord cSharpNotes = new Chord();
+        Chord dFlatNotes = new Chord();
+        Chord dSharpNotes = new Chord();
+        Chord eFlatNotes = new Chord();
+        Chord fSharpNotes = new Chord();
+        Chord gFlatNotes = new Chord();
+        Chord gSharpNotes = new Chord();
+        aNotes.addChord("A Note", aNote);
+        bNotes.addChord("B Note", bNote);
+        cNotes.addChord("C Note", cNote);
+        dNotes.addChord("D Note", dNote);
+        eNotes.addChord("E Note", eNote);
+        fNotes.addChord("F Note", fNote);
+        gNotes.addChord("G Note", gNote);
+        aSharpNotes.addChord("A# Note", aSharpNote);
+        aFlatNotes.addChord("Ab Note", aFlatNote);
+        bFlatNotes.addChord("Bb Note", bFlatNote);
+        cSharpNotes.addChord("C# Note", cSharpNote);
+        dFlatNotes.addChord("Db Note", dFlatNote);
+        dSharpNotes.addChord("D# Note", dSharpNote);
+        eFlatNotes.addChord("Eb Note", eFlatNote);
+        fSharpNotes.addChord("F# Note", fSharpNote);
+        gFlatNotes.addChord("Gb Note", gFlatNote);
+        gSharpNotes.addChord("G# Note", gSharpNote);
+
+        chordList.add(chordList.size(), aNotes);
+        chordList.add(chordList.size(), aSharpNotes);
+        chordList.add(chordList.size(), bFlatNotes);
+        chordList.add(chordList.size(), bNotes);
+        chordList.add(chordList.size(), cNotes);
+        chordList.add(chordList.size(), cSharpNotes);
+        chordList.add(chordList.size(), dFlatNotes);
+        chordList.add(chordList.size(), dNotes);
+        chordList.add(chordList.size(), dSharpNotes);
+        chordList.add(chordList.size(), eFlatNotes);
+        chordList.add(chordList.size(), eNotes);
+        chordList.add(chordList.size(), fNotes);
+        chordList.add(chordList.size(), fSharpNotes);
+        chordList.add(chordList.size(), gFlatNotes);
+        chordList.add(chordList.size(), gNotes);
+        chordList.add(chordList.size(), gSharpNotes);
+        chordList.add(chordList.size(), aFlatNotes);
+
+    }
+
     public void makeChords() {
         Chord upDown = new Chord();
         upDown.addChord("Up Down", up, down);
@@ -239,6 +299,9 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
     }
 
     public void makeActualChords() {
+if (justNotes.isSelected()){
+    makeNotes();
+}
         if (major.isSelected()) {
             makeMajorChords();
         }
@@ -753,6 +816,7 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
         chordTime = 0;
         difficulty = difficulty + difficultyAddative;
         notesIn = chordList.get(randomNum).notes;
+        System.out.println(notesIn.size());
         if (notesIn.size() > 0) {
             notea = (int) notesIn.get(0);
             if (notesIn.size() > 1) {
@@ -1045,7 +1109,7 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
         chordTimer.start();
         // this.paint(shape);
 //		frame = new JFrame();
-        top.setSize(500, 500);
+        top.setSize(600, 600);
         Rectangle shape = new Rectangle(5, 5, 5, 5);
         top.setContentPane(this);
         window = top.getContentPane();
@@ -1113,9 +1177,10 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
         Graphics2D graphics = (Graphics2D) (g);
 
         graphics.drawString("Time:" + (int) howManySeconds(), this.getWidth() / 2, this.getHeight() - 20);
-        graphics.drawString(("Score: " + numToString(currentPlayedCorrect)), this.getWidth() / 4, this.getHeight() - 20);
+        graphics.drawString(("Current Correct Notes: " + numToString(currentPlayedCorrect)), this.getWidth() / 4, this.getHeight() - 20);
         graphics.drawString(("Current Chord: " + currentChordName), (int) this.getBounds().getMinX() + 20, this.getHeight() / 5);
         graphics.drawString(("Wrong Notes = " + wrongNotesCount), (int) (this.getWidth() * .75), this.getHeight() - 20);
+        graphics.drawString(("Your score is " + gameScore), 20, this.getHeight() - 20);
 //		super.paintComponent(g);
 //graphics.
 //        System.out.println(chordTime);
@@ -1142,33 +1207,23 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
             {
                 graphics.drawImage(img, (this.getWidth() - img.getWidth()) / 2, this.getHeight() - (img.getHeight() + 40), this);
             }
-        }
-//   img = ImageIO.read(new File("/relearning/staff.jpeg"));
-//            JLabel picLabel = new JLabel(new ImageIcon(img));
-//            window.add(picLabel);
-    
-    catch (IOException ex
-
-    
-        ) {
+        } //   img = ImageIO.read(new File("/relearning/staff.jpeg"));
+        //            JLabel picLabel = new JLabel(new ImageIcon(img));
+        //            window.add(picLabel);
+        catch (IOException ex) {
             Logger.getLogger(LessonB.class.getName()).log(Level.SEVERE, null, ex);
-    }
+        }
 
-    graphics.drawString (currentChordName,
-            
-    (int
-
-    ) (this.getBounds()
-
-
-.getMaxX() - chordTime * difficulty), this.getHeight()/5-20);
+        graphics.drawString(currentChordName,
+                (int) (this.getBounds()
+                .getMaxX() - chordTime * difficulty), this.getHeight() / 5 - 20);
 
         // Draw Text
 //		g.drawString("This is my custom Panel!", 10, 20);
-    
-}
+    }
+
     @Override
-        public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e) {
         timeFast++;
         time = (int) timeFast / 10;
         chordTime++;
@@ -1260,7 +1315,7 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
     }
 
     @Override
-        public void itemStateChanged(ItemEvent e) {
+    public void itemStateChanged(ItemEvent e) {
 //      
 //      System.out.println("You pressed something");
         this.startGame2();
