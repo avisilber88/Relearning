@@ -52,7 +52,7 @@ import javax.swing.*;
  * @author Avi
  */
 public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyListener, ActionListener {
-
+int bassNumberExpected;
     double bestDifficulty;
     int currentPlayedCorrect;
     int hi;
@@ -65,6 +65,8 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
     boolean keyTwoPressed;
     boolean keyThreePressed;
     boolean keyFourPressed;
+    boolean bassPressed;
+    boolean secondBassPressed;
     int randomNum;
     List notesIn;
     JTextArea blob;
@@ -122,8 +124,10 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
     Container window;
     Container bob;
     JMenuBar menuBar;
-    JMenu menu, submenu;
+    JMenu menu, submenu, bassMenu;
+    
     JMenuItem menuIteem;
+    JRadioButton noBass, oneBass, twoBass;
     JCheckBoxMenuItem justNotes, major, minor, sus, sus2, majorSeventh, minorSeventh, dominantSeventh;
     Formatter highScoreFormatter;
     File highScoreFile;
@@ -199,7 +203,15 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
 
     public void startGame2() {
         chordList = new ArrayList<Chord>(0);
-
+if (noBass.isSelected()){
+    bassNumberExpected=0;
+}
+if (oneBass.isSelected()){
+    bassNumberExpected=1;
+}
+if (twoBass.isSelected()){
+    bassNumberExpected=2;
+}
         makeActualChords();
         int testVal = 10;
 //        System.out.println(testVal + " is really " + arrangeNote((byte) testVal) + " or " + noteNameComplex(testVal));
@@ -821,6 +833,8 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
         keyTwoPressed = false;
         keyThreePressed = false;
         keyFourPressed = false;
+        bassPressed = false;
+        secondBassPressed = false;
     }
 
     public int arrangeNote(byte a) {
@@ -945,7 +959,13 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
         if (keyFourPressed == true) {
             currentPlayedCorrect++;
         }
-        if (currentPlayedCorrect == notesIn.size()) {
+        if (bassPressed ==true){
+            currentPlayedCorrect++;
+        }
+        if (secondBassPressed ==true){
+            currentPlayedCorrect++;
+        }
+        if (currentPlayedCorrect == (bassNumberExpected+notesIn.size())) {
 //            System.out.println("You Win!!");
 
             gameScore = gameScore + 1;
@@ -1105,9 +1125,13 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
 
         bob.add(frequencyScroller);
         menuBar = new JMenuBar();
+       
         menu = new JMenu("chord options");
+        
+        
         menu.setMnemonic(KeyEvent.VK_A);
         menuBar.add(menu);
+     
 //        menu
 //        top.add(menuBar
         justNotes = new JCheckBoxMenuItem("Just Learn Notes");
@@ -1142,6 +1166,27 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
 
         dominantSeventh.addItemListener(this);
 
+            bassMenu = new JMenu ("Left Hand Bass Count");
+        menu.setMnemonic (KeyEvent.VK_B);
+        
+        menuBar.add(bassMenu);
+        
+        noBass = new JRadioButton("No Bass");
+        oneBass = new JRadioButton("One Bass");
+        twoBass = new JRadioButton("Two Bass");
+        
+        ButtonGroup group = new ButtonGroup();
+        group.add(noBass);
+        group.add(oneBass);
+        group.add(twoBass);
+        
+        bassMenu.add(noBass);
+        bassMenu.add(oneBass);
+        bassMenu.add(twoBass);
+        
+        noBass.addItemListener(this);
+        oneBass.addItemListener(this);
+        twoBass.addItemListener(this);
         top.setJMenuBar(menuBar);
         top.setVisible(true);
     }

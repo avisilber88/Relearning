@@ -102,9 +102,33 @@ public class MidiHandler {
                 if (note == (placeHolderLesson.notea)) {
 //        System.out.println("you pressed up");
                     if (myMsg.getData2() != 0) {
+                        System.out.println("you pressing the button");
+                        if ((placeHolderLesson.bassPressed ==true)&&(placeHolderLesson.bassNumberExpected==2)){
+                        placeHolderLesson.secondBassPressed = true;
+                        }
+                        else
+                        {
+                        if ((placeHolderLesson.keyOnePressed == true)&&(placeHolderLesson.bassNumberExpected>0)){
+                            placeHolderLesson.bassPressed = true;
+                        }
+                        else{
                         placeHolderLesson.keyOnePressed = true;
+                        }
+                        }
                     } else {
+                        
+                        if (placeHolderLesson.secondBassPressed ==true){
+                         placeHolderLesson.secondBassPressed = false; 
+                        }
+                        else
+                        {
+                        if (placeHolderLesson.bassPressed == true){
+                            placeHolderLesson.bassPressed = false;
+                        }
+                        else {
                         placeHolderLesson.keyOnePressed = false;
+                        }
+                        }
                     }
 
 //        chord.put(e.getKeyChar(), true);
