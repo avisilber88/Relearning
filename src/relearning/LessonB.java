@@ -45,7 +45,7 @@ import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
 import javax.swing.*;
-//import org.jfugue.*;
+
 
 /**
  *
@@ -140,7 +140,7 @@ int bassNumberExpected;
 
     public LessonB() {
         difficultyAddative = .05;
-        difficulty = 1;
+        difficulty = 4;
         currentChordName = "";
         wrongNotesCount = 0;
         wrongNotesCountThisChord = 0;
@@ -817,13 +817,13 @@ if (twoBass.isSelected()){
         notesIn = chordList.get(randomNum).notes;
         System.out.println(notesIn.size());
         if (notesIn.size() > 0) {
-            notea = (int) notesIn.get(0);
+            notea = (Integer) notesIn.get(0);
             if (notesIn.size() > 1) {
-                noteb = (int) notesIn.get(1);
+                noteb = (Integer) notesIn.get(1);
                 if (notesIn.size() > 2) {
-                    notec = (int) notesIn.get(2);
+                    notec = (Integer) notesIn.get(2);
                     if (notesIn.size() > 3) {
-                        noted = (int) notesIn.get(3);
+                        noted = (Integer) notesIn.get(3);
 
                     }
                 }
@@ -1280,10 +1280,10 @@ if (twoBass.isSelected()){
                 String a = highScoreScanner.next();
                 value = Double.parseDouble(a);
 
-                System.out.println("test1 " + value);
+//                System.out.println("test1 " + value);
 
             };
-            System.out.println("test2 " + value);
+//            System.out.println("test2 " + value);
             if (value < bestDifficulty) {
                 try {
                     highScoreFormatter = new Formatter("highScore.txt");
