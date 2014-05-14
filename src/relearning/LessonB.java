@@ -46,13 +46,14 @@ import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
 import javax.swing.*;
 
-
 /**
  *
  * @author Avi
  */
 public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyListener, ActionListener {
-int bassNumberExpected;
+
+    JButton okay;
+    int bassNumberExpected;
     double bestDifficulty;
     int currentPlayedCorrect;
     int hi;
@@ -117,6 +118,7 @@ int bassNumberExpected;
     JTextArea timePassedTextArea;
     JTextArea titleLineTextArea;
     JTextArea wrongNotesCountTextArea;
+    JTextArea difficultyChoice;
     int wrongNotesCountThisChord;
     Chord currentChord;
     //This begins the section that I am testing around with and am not confident in
@@ -125,7 +127,7 @@ int bassNumberExpected;
     Container bob;
     JMenuBar menuBar;
     JMenu menu, submenu, bassMenu;
-    
+
     JMenuItem menuIteem;
     JRadioButton noBass, oneBass, twoBass;
     JCheckBoxMenuItem justNotes, major, minor, sus, sus2, majorSeventh, minorSeventh, dominantSeventh;
@@ -140,7 +142,7 @@ int bassNumberExpected;
 
     public LessonB() {
         difficultyAddative = .05;
-        difficulty = 4;
+        difficulty = 2;
         currentChordName = "";
         wrongNotesCount = 0;
         wrongNotesCountThisChord = 0;
@@ -203,15 +205,15 @@ int bassNumberExpected;
 
     public void startGame2() {
         chordList = new ArrayList<Chord>(0);
-if (noBass.isSelected()){
-    bassNumberExpected=0;
-}
-if (oneBass.isSelected()){
-    bassNumberExpected=1;
-}
-if (twoBass.isSelected()){
-    bassNumberExpected=2;
-}
+        if (noBass.isSelected()) {
+            bassNumberExpected = 0;
+        }
+        if (oneBass.isSelected()) {
+            bassNumberExpected = 1;
+        }
+        if (twoBass.isSelected()) {
+            bassNumberExpected = 2;
+        }
         makeActualChords();
         int testVal = 10;
 //        System.out.println(testVal + " is really " + arrangeNote((byte) testVal) + " or " + noteNameComplex(testVal));
@@ -959,13 +961,13 @@ if (twoBass.isSelected()){
         if (keyFourPressed == true) {
             currentPlayedCorrect++;
         }
-        if (bassPressed ==true){
+        if (bassPressed == true) {
             currentPlayedCorrect++;
         }
-        if (secondBassPressed ==true){
+        if (secondBassPressed == true) {
             currentPlayedCorrect++;
         }
-        if (currentPlayedCorrect == (bassNumberExpected+notesIn.size())) {
+        if (currentPlayedCorrect == (bassNumberExpected + notesIn.size())) {
 //            System.out.println("You Win!!");
 
             gameScore = gameScore + 1;
@@ -1113,82 +1115,141 @@ if (twoBass.isSelected()){
 //        timer.start();
         chordTimer = new Timer(10, this);
         chordTimer.start();
+
         // this.paint(shape);
 //		frame = new JFrame();
         top.setSize(600, 600);
         Rectangle shape = new Rectangle(5, 5, 5, 5);
         top.setContentPane(this);
         window = top.getContentPane();
-        scoreFrequencyText = new JTextArea(50, 150);
         bob = top.getContentPane();
+        this.difficultyChoice = new JTextArea(10, 150);
+        this.difficultyChoice.setText("Set Diff(delete and type)");
+
+        bob.add(difficultyChoice);
+
+        okay = new JButton();
+        okay.setText("OK");
+        bob.add(okay);
+        okay.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    double a = Double.parseDouble(difficultyChoice.getText());
+                    if (a < allTimeBestDifficulty) {
+                        try {
+                            difficulty = Double.parseDouble(difficultyChoice.getText());
+                        } catch (Exception b) {
+                        System.out.println("we caught");
+                        }
+
+                    }
+                } catch (NumberFormatException a) {
+                        System.out.println("we caught");
+
+                }
+            }
+        });
+
+        scoreFrequencyText = new JTextArea(50, 150);
+
         frequencyScroller = new JScrollPane(scoreFrequencyText);
 
         bob.add(frequencyScroller);
         menuBar = new JMenuBar();
-       
+
         menu = new JMenu("chord options");
-        
-        
+
         menu.setMnemonic(KeyEvent.VK_A);
+
         menuBar.add(menu);
-     
+
 //        menu
 //        top.add(menuBar
         justNotes = new JCheckBoxMenuItem("Just Learn Notes");
 
         major = new JCheckBoxMenuItem("major");
-        justNotes.setSelected(true);
-        justNotes.addItemListener(this);
+
+        justNotes.setSelected(
+                true);
+        justNotes.addItemListener(
+                this);
         menu.add(justNotes);
+
         menu.add(major);
-        major.addItemListener(this);
+
+        major.addItemListener(
+                this);
         minor = new JCheckBoxMenuItem("minor");
+
         menu.add(minor);
-        minor.addItemListener(this);
+
+        minor.addItemListener(
+                this);
         sus2 = new JCheckBoxMenuItem("sus2");
+
         menu.add(sus2);
 
-        sus2.addItemListener(this);
+        sus2.addItemListener(
+                this);
         sus = new JCheckBoxMenuItem("sus");
+
         menu.add(sus);
 
-        sus.addItemListener(this);
+        sus.addItemListener(
+                this);
         minorSeventh = new JCheckBoxMenuItem("minorSeventh");
+
         menu.add(minorSeventh);
 
-        minorSeventh.addItemListener(this);
+        minorSeventh.addItemListener(
+                this);
         majorSeventh = new JCheckBoxMenuItem("majorSeventh");
+
         menu.add(majorSeventh);
 
-        majorSeventh.addItemListener(this);
+        majorSeventh.addItemListener(
+                this);
         dominantSeventh = new JCheckBoxMenuItem("dominantSeventh");
+
         menu.add(dominantSeventh);
 
-        dominantSeventh.addItemListener(this);
+        dominantSeventh.addItemListener(
+                this);
 
-            bassMenu = new JMenu ("Left Hand Bass Count");
-        menu.setMnemonic (KeyEvent.VK_B);
-        
+        bassMenu = new JMenu("Left Hand Bass Count");
+
+        menu.setMnemonic(KeyEvent.VK_B);
+
         menuBar.add(bassMenu);
-        
+
         noBass = new JRadioButton("No Bass");
         oneBass = new JRadioButton("One Bass");
         twoBass = new JRadioButton("Two Bass");
-        
+
         ButtonGroup group = new ButtonGroup();
+
         group.add(noBass);
+
         group.add(oneBass);
+
         group.add(twoBass);
-        
+
         bassMenu.add(noBass);
+
         bassMenu.add(oneBass);
+
         bassMenu.add(twoBass);
-        
-        noBass.addItemListener(this);
-        oneBass.addItemListener(this);
-        twoBass.addItemListener(this);
+
+        noBass.addItemListener(
+                this);
+        oneBass.addItemListener(
+                this);
+        twoBass.addItemListener(
+                this);
         top.setJMenuBar(menuBar);
-        top.setVisible(true);
+
+        top.setVisible(
+                true);
     }
 
     @Override
@@ -1281,7 +1342,6 @@ if (twoBass.isSelected()){
                 value = Double.parseDouble(a);
 
 //                System.out.println("test1 " + value);
-
             };
 //            System.out.println("test2 " + value);
             if (value < bestDifficulty) {
@@ -1295,20 +1355,18 @@ if (twoBass.isSelected()){
                 highScoreFormatter.close();
                 allTimeBestDifficulty = bestDifficulty;
 
-            }
-            else{
-                allTimeBestDifficulty=value;
+            } else {
+                allTimeBestDifficulty = value;
             }
 
         }
 
         graphics.drawString(
                 "Current Top Difficulty: " + bestDifficulty, 88, 20);
-        
 
         graphics.drawString(
                 "All-Time Top Difficulty: " + allTimeBestDifficulty, this.getWidth() - 150, 20);
-        
+
         graphics.drawString(
                 "Difficulty: " + difficultyRounded, 0, 20);
         g.setFont(new Font("TimesRoman", Font.BOLD, 14));
@@ -1357,6 +1415,10 @@ if (twoBass.isSelected()){
             int staffHeight = (int) (staffWidth * ((double) 162.0 / 310));
             frequencyScroller.setBounds(10, (this.getHeight() / 5) + 10, 150, this.getHeight() - ((imgHeight + 60) + (this.getHeight() / 5)));
 //           graphics.drawImage(staff, 170,((this.getHeight() / 5) + 10), staffWidth, staffHeight, this);
+            difficultyChoice.setBounds(this.getWidth() - 350, 5, 130, 20);
+            difficultyChoice.setBackground(Color.gray);
+
+            okay.setBounds(this.getWidth() - 220, 5, 60, 20);
 
             int eLine = this.getHeight() - (imgHeight + 50);
             int fLine = (this.getHeight() / 5);
@@ -1376,12 +1438,14 @@ if (twoBass.isSelected()){
 //            this.getWidth() - img.getWidth()) / 2?
             } else {
                 graphics.drawImage(blankImage, 10, this.getHeight() - (imgHeight + 40), this.getWidth() - 20, imgHeight, this);
+
             }
         } //   img = ImageIO.read(new File("/relearning/staff.jpeg"));
         //            JLabel picLabel = new JLabel(new ImageIcon(img));
         //            window.add(picLabel);
         catch (IOException ex) {
-            Logger.getLogger(LessonB.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LessonB.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
 
         g.setFont(
