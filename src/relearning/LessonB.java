@@ -50,7 +50,7 @@ import javax.swing.*;
  *
  * @author Avi
  */
-public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyListener, ActionListener {
+public class LessonB extends JPanel implements MouseListener, ItemListener, ImageObserver, KeyListener, ActionListener {
 
     JButton okay;
     int bassNumberExpected;
@@ -1127,7 +1127,36 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
         this.difficultyChoice.setText("Set Diff(delete and type)");
 
         bob.add(difficultyChoice);
+        difficultyChoice.addMouseListener(new MouseListener() {
+            public void mouseClicked(MouseEvent e) {
 
+                if (((difficultyChoice.getText().compareTo("Set Diff(delete and type)") == 0))) {
+                    difficultyChoice.setText("");
+                }
+
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            public void mousePressed(MouseEvent e) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+//            @Override
+            public void mouseReleased(MouseEvent e) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+//            @Override
+            public void mouseEntered(MouseEvent e) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+//            @Override
+            public void mouseExited(MouseEvent e) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        });
+//bob.addMouseListener(this);
         okay = new JButton();
         okay.setText("OK");
         bob.add(okay);
@@ -1139,12 +1168,12 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
                         try {
                             difficulty = Double.parseDouble(difficultyChoice.getText());
                         } catch (Exception b) {
-                        System.out.println("we caught");
+                            System.out.println("we caught");
                         }
 
                     }
                 } catch (NumberFormatException a) {
-                        System.out.println("we caught");
+                    System.out.println("we caught");
 
                 }
             }
@@ -1681,5 +1710,34 @@ public class LessonB extends JPanel implements ItemListener, ImageObserver, KeyL
 //        e.getMusicString(); //supposedly will return + for each same note
 ////        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 //    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+
+//        if (((difficultyChoice.getText().compareTo("Set Diff(delete and type)") == 0))) {
+//            difficultyChoice.setText("");
+//        }
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
 }
