@@ -23,6 +23,12 @@ import javax.sound.midi.ShortMessage;
  * @author DJ 4 Fathers
  */
 public class MidiHandler {
+//Things I am adding
+    // 1) to keep track of the actual notes from the previously played chord if we are doing interval mode
+    // 2) to compare each note played to all of the notes in the previously played chord to make sure that one of them is close enough
+    // 2a) figure out how to make this work given the bass
+    // 2aa) idea: make it so that the bass counting works that if it is not close, it counts as bass, otherwise it counts in chord.
+    // 3) maybe make a pick-a-chord that determines the actual notes necessary based on the chord just gone
 
     public MidiDevice device;
     public MidiInputReceiver midMan;
@@ -98,36 +104,42 @@ public class MidiHandler {
 //            System.out.println(myMsg);
             myMsg = (ShortMessage) msg;
             if (myMsg.getData1() != 0) {
-                int note = placeHolderLesson.arrangeNote((byte) myMsg.getData1());
+                int noteActual = ((byte) myMsg.getData1());
+                int note = placeHolderLesson.arrangeNote((byte) noteActual);
                 if (note == (placeHolderLesson.notea)) {
 //        System.out.println("you pressed up");
                     if (myMsg.getData2() != 0) {
-                        System.out.println("you pressing the button");
-                        if ((placeHolderLesson.bassPressed ==true)&&(placeHolderLesson.bassNumberExpected==2)){
-                        placeHolderLesson.secondBassPressed = true;
+//                        System.out.println("you pressing the button");
+                        if ((placeHolderLesson.bassPressed == true) && (placeHolderLesson.bassNumberExpected == 2)) { //checks if you are pressing the bass three times
+                            placeHolderLesson.secondBassPressed = true;
+                        } else {
+                            if ((placeHolderLesson.keyOnePressed == true) && (placeHolderLesson.bassNumberExpected > 0)) { //checks if you are pressing the bass 1 time
+                                placeHolderLesson.bassPressed = true;
+                            } else {
+                                if (placeHolderLesson.checkInversionMode()) {
+                                    if (placeHolderLesson.inversionCheck(noteActual)) {
+                                        placeHolderLesson.keyOnePressed = true;
+                                        placeHolderLesson.realThisNoteA = noteActual;
+                                    } else if (placeHolderLesson.bassPressed) {
+                                        placeHolderLesson.secondBassPressed = true;
+                                    } else {
+                                        placeHolderLesson.bassPressed = true;
+                                    }
+                                } else {
+                                    placeHolderLesson.keyOnePressed = true; //checks if you are only pressing once
+                                }
+                            }
                         }
-                        else
-                        {
-                        if ((placeHolderLesson.keyOnePressed == true)&&(placeHolderLesson.bassNumberExpected>0)){
-                            placeHolderLesson.bassPressed = true;
-                        }
-                        else{
-                        placeHolderLesson.keyOnePressed = true;
-                        }
-                        }
-                    } else {
-                        
-                        if (placeHolderLesson.secondBassPressed ==true){
-                         placeHolderLesson.secondBassPressed = false; 
-                        }
-                        else
-                        {
-                        if (placeHolderLesson.bassPressed == true){
-                            placeHolderLesson.bassPressed = false;
-                        }
-                        else {
-                        placeHolderLesson.keyOnePressed = false;
-                        }
+                    } else { //if you are no longer pressing it
+
+                        if (placeHolderLesson.secondBassPressed == true) {
+                            placeHolderLesson.secondBassPressed = false;
+                        } else {
+                            if (placeHolderLesson.bassPressed == true) {
+                                placeHolderLesson.bassPressed = false;
+                            } else {
+                                placeHolderLesson.keyOnePressed = false;
+                            }
                         }
                     }
 
@@ -135,7 +147,16 @@ public class MidiHandler {
                 } else if (note == (placeHolderLesson.noteb)) {
 //        System.out.println("you pressed down");
                     if (myMsg.getData2() != 0) {
-                        placeHolderLesson.keyTwoPressed = true;
+                        if (placeHolderLesson.checkInversionMode()) {
+                            if (placeHolderLesson.inversionCheck(noteActual)) {
+
+                                placeHolderLesson.keyTwoPressed = true;
+                                placeHolderLesson.realThisNoteB = noteActual;
+
+                            }
+                        } else {
+                            placeHolderLesson.keyTwoPressed = true;
+                        }
                     } else {
                         placeHolderLesson.keyTwoPressed = false;
                     }
@@ -143,7 +164,15 @@ public class MidiHandler {
                 } else if (note == (placeHolderLesson.notec)) {
 //        System.out.println("you pressed left");
                     if (myMsg.getData2() != 0) {
-                        placeHolderLesson.keyThreePressed = true;
+                        if (placeHolderLesson.checkInversionMode()) {
+                            if (placeHolderLesson.inversionCheck(noteActual)) {
+                                placeHolderLesson.keyThreePressed = true;
+                                placeHolderLesson.realThisNoteC = noteActual;
+
+                            }
+                        } else {
+                            placeHolderLesson.keyThreePressed = true;
+                        }
                     } else {
                         placeHolderLesson.keyThreePressed = false;
                     }
@@ -151,18 +180,29 @@ public class MidiHandler {
                 } else if (note == (placeHolderLesson.noted)) {
 //        System.out.println("you pressed right");
                     if (myMsg.getData2() != 0) {
-                        placeHolderLesson.keyFourPressed = true;
+                        if (placeHolderLesson.checkInversionMode()) {
+                            if (placeHolderLesson.inversionCheck(noteActual)) {
+                                placeHolderLesson.keyFourPressed = true;
+                                placeHolderLesson.realThisNoteD = noteActual;
+
+                            }
+                        } else {
+                            placeHolderLesson.keyFourPressed = true;
+                        }
+
                     } else {
                         placeHolderLesson.keyFourPressed = false;
                     }
 
                 } else if (placeHolderLesson.chordTime > 100) {
-                    if (myMsg.getData2() !=0){
-                    wrongNote();}
-                    
+                    if (myMsg.getData2() != 0) {
+                        wrongNote();
+                    }
+
                 }
 
             }
+
             placeHolderLesson.checkList();
 //            System.out.println((myMsg.getData2()));
         }
@@ -173,12 +213,12 @@ public class MidiHandler {
         public void close() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
-        
-          public void wrongNote() {
-        placeHolderLesson.wrongNotesCount = placeHolderLesson.wrongNotesCount + 1;
-        placeHolderLesson.wrongNotesCountThisChord = placeHolderLesson.wrongNotesCountThisChord + 1;
- placeHolderLesson.wrongNotesCountTextArea.setText("Wrong Notes = " + placeHolderLesson.wrongNotesCount);
-          }
+
+        public void wrongNote() {
+            placeHolderLesson.wrongNotesCount = placeHolderLesson.wrongNotesCount + 1;
+            placeHolderLesson.wrongNotesCountThisChord = placeHolderLesson.wrongNotesCountThisChord + 1;
+            placeHolderLesson.wrongNotesCountTextArea.setText("Wrong Notes = " + placeHolderLesson.wrongNotesCount);
+        }
     }
 //    public void close() {}
 //
@@ -187,7 +227,5 @@ public class MidiHandler {
 //            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 //        }
 //    }
-
-  
 
 }

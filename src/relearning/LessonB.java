@@ -62,6 +62,7 @@ public class LessonB extends JPanel implements MouseListener, ItemListener, Imag
     double allTimeBestDifficulty;
     JScrollPane frequencyScroller;
     JTextArea scoreFrequencyText;
+    boolean chordMode;
     boolean keyOnePressed;
     boolean keyTwoPressed;
     boolean keyThreePressed;
@@ -103,6 +104,8 @@ public class LessonB extends JPanel implements MouseListener, ItemListener, Imag
     int noteb;
     int notec;
     int noted;
+    int realThisNoteA, realThisNoteB, realThisNoteC, realThisNoteD;
+    int realLastNoteA, realLastNoteB, realLastNoteC, realLastNoteD;
     int numNotesPressed;
     int wrongNotesCount;
     int gameScore;
@@ -126,10 +129,11 @@ public class LessonB extends JPanel implements MouseListener, ItemListener, Imag
     Container window;
     Container bob;
     JMenuBar menuBar;
-    JMenu menu, submenu, bassMenu;
-
+    JMenu menu, submenu, bassMenu, inversionMenu;
+    
     JMenuItem menuIteem;
     JRadioButton noBass, oneBass, twoBass;
+    JRadioButton inversionModeOff, inversionModeOn;
     JCheckBoxMenuItem justNotes, major, minor, sus, sus2, majorSeventh, minorSeventh, dominantSeventh;
     Formatter highScoreFormatter;
     File highScoreFile;
@@ -146,6 +150,10 @@ public class LessonB extends JPanel implements MouseListener, ItemListener, Imag
         currentChordName = "";
         wrongNotesCount = 0;
         wrongNotesCountThisChord = 0;
+        realLastNoteA=0;
+        realLastNoteB=0;
+        realLastNoteC=0;
+        realLastNoteD=0;
 //DeviceThatWillTransmitMidi keyBoard2 = new DeviceThatWillTransmitMidi();
         top = new JFrame();
         top.add(this);
@@ -176,6 +184,27 @@ public class LessonB extends JPanel implements MouseListener, ItemListener, Imag
         //}
     }
 
+    public boolean inversionCheck(int n){
+        int i = 3;
+       if (realLastNoteA==0){
+           return true;
+       }
+       else if (Math.abs(realLastNoteA-n)<=i){
+            return true;
+        }
+        else if (Math.abs(realLastNoteB-n)<=i){
+            return true;
+        }
+        else if (Math.abs(realLastNoteC-n)<=i){
+            return true;
+        }
+        else if (Math.abs(realLastNoteD-n)<=i){
+            return true;
+        }
+        else
+        return false;
+    }
+    
     public void startGame() {
 //        try
         try {
@@ -815,8 +844,10 @@ public class LessonB extends JPanel implements MouseListener, ItemListener, Imag
         currentChord = chordList.get(randomNum);
 //        playThis.setText(currentChordName);
         chordTime = 0;
-
-        notesIn = chordList.get(randomNum).notes;
+if (checkInversionMode()){
+    setupInversionNotes();
+}
+    notesIn = chordList.get(randomNum).notes;
         System.out.println(notesIn.size());
         if (notesIn.size() > 0) {
             notea = (Integer) notesIn.get(0);
@@ -1245,15 +1276,27 @@ public class LessonB extends JPanel implements MouseListener, ItemListener, Imag
         dominantSeventh.addItemListener(
                 this);
 
-        bassMenu = new JMenu("Left Hand Bass Count");
 
         menu.setMnemonic(KeyEvent.VK_B);
 
+            bassMenu = new JMenu ("Left Hand Bass Count");
+            
+        menu.setMnemonic (KeyEvent.VK_B);
+        
         menuBar.add(bassMenu);
 
         noBass = new JRadioButton("No Bass");
         oneBass = new JRadioButton("One Bass");
         twoBass = new JRadioButton("Two Bass");
+        inversionMenu = new JMenu ("Inversion Options");
+           inversionModeOn = new JRadioButton("Only Score Best Inversions");
+           inversionModeOff = new JRadioButton("Count Any Invesion");
+           ButtonGroup inversionGroup = new ButtonGroup();
+           inversionGroup.add(inversionModeOn);
+           inversionGroup.add(inversionModeOff);
+           inversionMenu.add(inversionModeOn);
+           inversionMenu.add(inversionModeOff);
+           menuBar.add(inversionMenu);
 
         ButtonGroup group = new ButtonGroup();
 
@@ -1269,20 +1312,47 @@ public class LessonB extends JPanel implements MouseListener, ItemListener, Imag
 
         bassMenu.add(twoBass);
 
+
         noBass.addItemListener(
                 this);
         oneBass.addItemListener(
                 this);
         twoBass.addItemListener(
                 this);
+        
+        
+        inversionModeOn.addItemListener(this);
+        inversionModeOff.addItemListener(this);
+        
+        inversionModeOn.setSelected(true);
+        noBass.addItemListener(this);
+        oneBass.addItemListener(this);
+        twoBass.addItemListener(this);
+
         top.setJMenuBar(menuBar);
 
         top.setVisible(
                 true);
     }
 
-    @Override
 
+    public boolean checkInversionMode(){
+       if (inversionModeOn.isSelected()){
+              return true;
+       }       
+       else
+           return false;
+    }
+    
+    public void setupInversionNotes(){
+        realLastNoteA=realThisNoteA;
+        realLastNoteB=realThisNoteB;
+        realLastNoteC=realThisNoteC;
+        realLastNoteD=realThisNoteD;
+        
+    }
+    
+    @Override    
     public void keyTyped(KeyEvent e) {
 
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
