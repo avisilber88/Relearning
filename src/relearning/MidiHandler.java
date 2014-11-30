@@ -30,6 +30,9 @@ public class MidiHandler {
     // 2aa) idea: make it so that the bass counting works that if it is not close, it counts as bass, otherwise it counts in chord.
     // 3) maybe make a pick-a-chord that determines the actual notes necessary based on the chord just gone
 
+    //Next steps:
+    //Setup a mixed tonic mode where the key changes to relative occasionally but only under certain perameters
+    
     public MidiDevice device;
     public MidiInputReceiver midMan;
 
@@ -103,14 +106,14 @@ public class MidiHandler {
 //            System.out.println(msg.getMessage
 //            System.out.println(myMsg);
             myMsg = (ShortMessage) msg;
-            if (myMsg.getData1() != 0) {
+            if (myMsg.getData1() != 0) {//pressing the key
                 int noteActual = ((byte) myMsg.getData1());
                 int note = placeHolderLesson.arrangeNote((byte) noteActual);
                 if (note == (placeHolderLesson.notea)) {
 //        System.out.println("you pressed up");
                     if (myMsg.getData2() != 0) {
 //                        System.out.println("you pressing the button");
-                        if ((placeHolderLesson.bassPressed == true) && (placeHolderLesson.bassNumberExpected == 2)) { //checks if you are pressing the bass three times
+                        if ((placeHolderLesson.bassPressed == true)&&(placeHolderLesson.keyOnePressed==true) && (placeHolderLesson.bassNumberExpected == 2)) { //checks if you are pressing the bass three times
                             placeHolderLesson.secondBassPressed = true;
                         } else {
                             if ((placeHolderLesson.keyOnePressed == true) && (placeHolderLesson.bassNumberExpected > 0)) { //checks if you are pressing the bass 1 time

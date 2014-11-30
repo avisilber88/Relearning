@@ -70,7 +70,8 @@ public class LessonB extends JPanel implements MouseListener, ItemListener, Imag
     boolean bassPressed;
     boolean secondBassPressed;
     int randomNum;
-    List notesIn;
+    String tonic;
+    List notesIn, keyNotes;
     JTextArea blob;
     JTextArea playThis;
     JTextArea scoreSheetTextArea;
@@ -100,6 +101,7 @@ public class LessonB extends JPanel implements MouseListener, ItemListener, Imag
     int gSharpNote = aFlatNote;
     int aSharpNote = bFlatNote;
     String currentChordName;
+    boolean thisIsFirst;
     int notea;
     int noteb;
     int notec;
@@ -129,11 +131,12 @@ public class LessonB extends JPanel implements MouseListener, ItemListener, Imag
     Container window;
     Container bob;
     JMenuBar menuBar;
-    JMenu menu, submenu, bassMenu, inversionMenu;
-    
+    JMenu menu, submenu, bassMenu, inversionMenu, keyMenu;
+
     JMenuItem menuIteem;
     JRadioButton noBass, oneBass, twoBass;
     JRadioButton inversionModeOff, inversionModeOn;
+    JRadioButton randomKey, relativeKey, sameKey;
     JCheckBoxMenuItem justNotes, major, minor, sus, sus2, majorSeventh, minorSeventh, dominantSeventh;
     Formatter highScoreFormatter;
     File highScoreFile;
@@ -150,10 +153,7 @@ public class LessonB extends JPanel implements MouseListener, ItemListener, Imag
         currentChordName = "";
         wrongNotesCount = 0;
         wrongNotesCountThisChord = 0;
-        realLastNoteA=0;
-        realLastNoteB=0;
-        realLastNoteC=0;
-        realLastNoteD=0;
+
 //DeviceThatWillTransmitMidi keyBoard2 = new DeviceThatWillTransmitMidi();
         top = new JFrame();
         top.add(this);
@@ -184,27 +184,23 @@ public class LessonB extends JPanel implements MouseListener, ItemListener, Imag
         //}
     }
 
-    public boolean inversionCheck(int n){
-        int i = 3;
-       if (realLastNoteA==0){
-           return true;
-       }
-       else if (Math.abs(realLastNoteA-n)<=i){
+    public boolean inversionCheck(int n) {
+        int i = 4;
+        if (realLastNoteA == 0) {
             return true;
-        }
-        else if (Math.abs(realLastNoteB-n)<=i){
+        } else if (Math.abs(realLastNoteA - n) <= i) {
             return true;
-        }
-        else if (Math.abs(realLastNoteC-n)<=i){
+        } else if (Math.abs(realLastNoteB - n) <= i) {
             return true;
-        }
-        else if (Math.abs(realLastNoteD-n)<=i){
+        } else if (Math.abs(realLastNoteC - n) <= i) {
             return true;
+        } else if (Math.abs(realLastNoteD - n) <= i) {
+            return true;
+        } else {
+            return false;
         }
-        else
-        return false;
     }
-    
+
     public void startGame() {
 //        try
         try {
@@ -233,6 +229,10 @@ public class LessonB extends JPanel implements MouseListener, ItemListener, Imag
     }
 
     public void startGame2() {
+        realLastNoteA = 0;
+        realLastNoteB = 0;
+        realLastNoteC = 0;
+        realLastNoteD = 0;
         chordList = new ArrayList<Chord>(0);
         if (noBass.isSelected()) {
             bassNumberExpected = 0;
@@ -246,6 +246,8 @@ public class LessonB extends JPanel implements MouseListener, ItemListener, Imag
         makeActualChords();
         int testVal = 10;
 //        System.out.println(testVal + " is really " + arrangeNote((byte) testVal) + " or " + noteNameComplex(testVal));
+        thisIsFirst = true;
+        System.out.println("this is first");
         pickAChord();
     }
 
@@ -827,10 +829,6 @@ public class LessonB extends JPanel implements MouseListener, ItemListener, Imag
     }
 
     public void pickAChord() {
-        int maximum = chordList.size();
-        int minimum = 0;
-        Random rn = new Random();
-        randomNum = rn.nextInt((maximum - minimum)) + minimum;
         if ((this.wrongNotesCountThisChord == 0) && ((this.getBounds().getMaxX() - chordTime * difficulty) > 0)) {
             difficulty = difficulty + difficultyAddative;
         } else {
@@ -838,17 +836,27 @@ public class LessonB extends JPanel implements MouseListener, ItemListener, Imag
                 difficulty = difficulty - difficultyAddative;
             }
         }
+        if (checkInversionMode()) {
+            setupInversionNotes();
+        }
         wrongNotesCountThisChord = 0;
+        pickAChord2();
+
+    }
+
+    public void pickAChord2() {
+        int maximum = chordList.size();
+        int minimum = 0;
+        Random rn = new Random();
+        randomNum = rn.nextInt((maximum - minimum)) + minimum;
 
         currentChordName = chordList.get(randomNum).myName;
         currentChord = chordList.get(randomNum);
 //        playThis.setText(currentChordName);
         chordTime = 0;
-if (checkInversionMode()){
-    setupInversionNotes();
-}
-    notesIn = chordList.get(randomNum).notes;
-        System.out.println(notesIn.size());
+
+        notesIn = chordList.get(randomNum).notes;
+
         if (notesIn.size() > 0) {
             notea = (Integer) notesIn.get(0);
             if (notesIn.size() > 1) {
@@ -868,6 +876,205 @@ if (checkInversionMode()){
         keyFourPressed = false;
         bassPressed = false;
         secondBassPressed = false;
+        if (!randomKey.isSelected()) {
+            if (thisIsFirst) {
+                setTonic(currentChordName);
+                System.out.println(getTonic());
+                thisIsFirst = false;
+
+            } else if (!chordInKey(notesIn)) {
+                System.out.println(currentChordName + ": it wasn't in the key of " + getTonic());
+                pickAChord2();
+            }
+            else if (relativeKey.isSelected()){
+                setTonic(currentChordName);
+            }
+
+        }
+    }
+
+    public void setTonic(String chordName) {
+        if (chordName.endsWith("m7")) {
+            tonic = chordName.substring(0, (int) (chordName.length() - 1));
+        } else if (chordName.endsWith("maj7")) {
+            tonic = chordName.substring(0, chordName.length() - 4);
+        } else if (chordName.endsWith("7")) {
+            tonic = chordName.substring(0, chordName.length() - 1);
+        } else if (chordName.endsWith("sus")) {
+            tonic = chordName.substring(0, chordName.length() - 3);
+        } else if (chordName.endsWith("sus4")) {
+            tonic = chordName.substring(0, chordName.length() - 4);
+        } else if (chordName.endsWith(" Note")) {
+            tonic = chordName.substring(0, chordName.length() - 5);
+        } else {
+            tonic = chordName;
+        }
+        setKeyNotes();
+
+    }
+
+    public String getTonic() {
+        return tonic;
+    }
+
+    public void setKeyNotes() {
+        keyNotes = new ArrayList(7);
+
+        if (getTonic().endsWith("m")) { //if it is a minor chord
+            String tempName;
+            tempName = getTonic().substring(0, getTonic().length() - 1);
+            int tonicNote = getNoteNumber(tempName);
+            keyNotes.add(0, (byte) tonicNote);
+            keyNotes.add(1, arrangeNote((byte) (tonicNote + 2)));
+            keyNotes.add(2, arrangeNote((byte) (tonicNote + 3)));
+            keyNotes.add(3, arrangeNote((byte) (tonicNote + 5)));
+            keyNotes.add(4, arrangeNote((byte) (tonicNote + 7)));
+            keyNotes.add(5, arrangeNote((byte) (tonicNote + 8)));
+            keyNotes.add(6, arrangeNote((byte) (tonicNote + 10)));
+
+        } else {
+            int tonicNote = getNoteNumber(getTonic());
+            keyNotes.add(0, tonicNote);
+            keyNotes.add(1, arrangeNote((byte) (tonicNote + 2)));
+            keyNotes.add(2, arrangeNote((byte) (tonicNote + 4)));
+            keyNotes.add(3, arrangeNote((byte) (tonicNote + 5)));
+            keyNotes.add(4, arrangeNote((byte) (tonicNote + 7)));
+            keyNotes.add(5, arrangeNote((byte) (tonicNote + 9)));
+            keyNotes.add(6, arrangeNote((byte) (tonicNote + 11)));
+
+        }
+
+    }
+
+    public int getNoteNumber(String noteName) {
+        if (noteName.equalsIgnoreCase("Db")) {
+            return 1;
+        } else if (noteName.equalsIgnoreCase("D")) {
+            return 2;
+        } else if (noteName.equalsIgnoreCase("D#")) {
+            return 3;
+        } else if (noteName.equalsIgnoreCase("Eb")) {
+            return 3;
+        } else if (noteName.equalsIgnoreCase("E")) {
+            return 4;
+        } else if (noteName.equalsIgnoreCase("F")) {
+            return 5;
+        } else if (noteName.equalsIgnoreCase("F#")) {
+            return 6;
+        } else if (noteName.equalsIgnoreCase("Gb")) {
+            return 6;
+        } else if (noteName.equalsIgnoreCase("G")) {
+            return 7;
+        } else if (noteName.equalsIgnoreCase("G#")) {
+            return 8;
+        } else if (noteName.equalsIgnoreCase("Ab")) {
+            return 8;
+        } else if (noteName.equalsIgnoreCase("A")) {
+            return 9;
+        } else if (noteName.equalsIgnoreCase("A#")) {
+            return 10;
+        } else if (noteName.equalsIgnoreCase("Bb")) {
+            return 10;
+        } else if (noteName.equalsIgnoreCase("B")) {
+            return 11;
+        } else if (noteName.equalsIgnoreCase("C")) {
+            return 12;
+        } else if (noteName.equalsIgnoreCase("C#")) {
+            return 1;
+        } else {
+            return 12;
+        }
+
+    }
+
+    public boolean chordInKey(List notes) {
+
+//        if (notes.size() > 0) {
+//            int a = (Integer)notes.get(0);
+//            System.out.println("the value is " +a);
+//            if (!keyNotes.contains((byte)a)) {
+//                System.out.println("told ya");
+//                return false;
+//            }
+//            if (notes.size() > 1) {
+//                int b = (Integer)notes.get(1);
+//                if (!keyNotes.contains((byte)b)) {
+//                    return false;
+//                }
+//                if (notes.size() > 2) {
+//                    int c = (Integer)notes.get(2);
+//                    if (!keyNotes.contains((byte)c)) {
+//                        return false;
+//                    }
+//                    if (notes.size() > 3) {
+//                        int d = (Integer)notes.get(3);
+//                        if (!keyNotes.contains((byte)d)) {
+//                            return false;
+//                        }
+//                    }
+//                }
+//            }
+//        }
+        if (notes.size() > 0) {
+            int a = (Integer) notes.get(0);
+//            if (!keyNotes.contains((byte) a)) {
+//                System.out.println("told ya");
+//                return false;
+//            }
+            boolean found = false;
+            for (int i = 0; i < 7; i++) {
+                if (a == (Integer) keyNotes.get(i)) {
+                    found = true;
+                }
+            }
+            if (!found) {
+                return false;
+            }
+
+            if (notes.size() > 1) {
+                int b = (Integer) notes.get(1);
+                found = false;
+                for (int i = 0; i < 7; i++) {
+                    if (b == (Integer) keyNotes.get(i)) {
+                        found = true;
+                    }
+                }
+                if (!found) {
+                    return false;
+                }
+
+                if (notes.size() > 2) {
+                    if (notes.size() > 1) {
+                        int c = (Integer) notes.get(2);
+                        found = false;
+                        for (int i = 0; i < 7; i++) {
+                            if (b == (Integer) keyNotes.get(i)) {
+                                found = true;
+                            }
+                        }
+                        if (!found) {
+                            return false;
+                        }
+                        if (notes.size() > 3) {
+                            if (notes.size() > 1) {
+                                int d = (Integer) notes.get(3);
+                                found = false;
+                                for (int i = 0; i < 7; i++) {
+                                    if (b == (Integer) keyNotes.get(i)) {
+                                        found = true;
+                                    }
+                                }
+                                if (!found) {
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+                return true; //replace this
+        
     }
 
     public int arrangeNote(byte a) {
@@ -1276,27 +1483,42 @@ if (checkInversionMode()){
         dominantSeventh.addItemListener(
                 this);
 
+        menu.setMnemonic(KeyEvent.VK_B);
+
+        bassMenu = new JMenu("Left Hand Bass Count");
 
         menu.setMnemonic(KeyEvent.VK_B);
 
-            bassMenu = new JMenu ("Left Hand Bass Count");
-            
-        menu.setMnemonic (KeyEvent.VK_B);
-        
         menuBar.add(bassMenu);
 
         noBass = new JRadioButton("No Bass");
         oneBass = new JRadioButton("One Bass");
         twoBass = new JRadioButton("Two Bass");
-        inversionMenu = new JMenu ("Inversion Options");
-           inversionModeOn = new JRadioButton("Only Score Best Inversions");
-           inversionModeOff = new JRadioButton("Count Any Invesion");
-           ButtonGroup inversionGroup = new ButtonGroup();
-           inversionGroup.add(inversionModeOn);
-           inversionGroup.add(inversionModeOff);
-           inversionMenu.add(inversionModeOn);
-           inversionMenu.add(inversionModeOff);
-           menuBar.add(inversionMenu);
+
+        keyMenu = new JMenu("Key Options");
+        randomKey = new JRadioButton("Key Signature Constantly Random");
+
+        relativeKey = new JRadioButton("Each Key relative to that of last chord");
+
+        sameKey = new JRadioButton("Each Key in the same key as original chord");
+
+        ButtonGroup keyGroup = new ButtonGroup();
+        keyGroup.add(randomKey);
+        keyGroup.add(relativeKey);
+        keyGroup.add(sameKey);
+        keyMenu.add(randomKey);
+        keyMenu.add(relativeKey);
+        keyMenu.add(sameKey);
+        menuBar.add(keyMenu);
+        inversionMenu = new JMenu("Inversion Options");
+        inversionModeOn = new JRadioButton("Only Score Best Inversions");
+        inversionModeOff = new JRadioButton("Count Any Invesion");
+        ButtonGroup inversionGroup = new ButtonGroup();
+        inversionGroup.add(inversionModeOn);
+        inversionGroup.add(inversionModeOff);
+        inversionMenu.add(inversionModeOn);
+        inversionMenu.add(inversionModeOff);
+        menuBar.add(inversionMenu);
 
         ButtonGroup group = new ButtonGroup();
 
@@ -1312,19 +1534,23 @@ if (checkInversionMode()){
 
         bassMenu.add(twoBass);
 
-
         noBass.addItemListener(
                 this);
         oneBass.addItemListener(
                 this);
         twoBass.addItemListener(
                 this);
-        
-        
+
         inversionModeOn.addItemListener(this);
         inversionModeOff.addItemListener(this);
-        
-        inversionModeOn.setSelected(true);
+
+        randomKey.addItemListener(this);
+
+        relativeKey.addItemListener(this);
+
+        sameKey.addItemListener(this);
+        randomKey.setSelected(true);
+        inversionModeOff.setSelected(true);
         noBass.addItemListener(this);
         oneBass.addItemListener(this);
         twoBass.addItemListener(this);
@@ -1335,24 +1561,23 @@ if (checkInversionMode()){
                 true);
     }
 
+    public boolean checkInversionMode() {
+        if (inversionModeOn.isSelected()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-    public boolean checkInversionMode(){
-       if (inversionModeOn.isSelected()){
-              return true;
-       }       
-       else
-           return false;
+    public void setupInversionNotes() {
+        realLastNoteA = realThisNoteA;
+        realLastNoteB = realThisNoteB;
+        realLastNoteC = realThisNoteC;
+        realLastNoteD = realThisNoteD;
+
     }
-    
-    public void setupInversionNotes(){
-        realLastNoteA=realThisNoteA;
-        realLastNoteB=realThisNoteB;
-        realLastNoteC=realThisNoteC;
-        realLastNoteD=realThisNoteD;
-        
-    }
-    
-    @Override    
+
+    @Override
     public void keyTyped(KeyEvent e) {
 
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
