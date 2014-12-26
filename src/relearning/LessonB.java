@@ -456,7 +456,7 @@ if (twoBass.isSelected()){
     }
 
     public void makeDominantSeventhChords() {
-        Chord aDom = new Chord();
+        Chord aDomSeventh = new Chord();
         Chord aSharpDomSeventh = new Chord();
         Chord bFlatDomSeventh = new Chord();
         Chord bDomSeventh = new Chord();
@@ -475,7 +475,7 @@ if (twoBass.isSelected()){
         Chord aFlatDomSeventh = new Chord();
         int baseNote;
         baseNote = aNote;
-        aDom.addChord("A7", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 7), addHalfSteps(baseNote, 10));
+        aDomSeventh.addChord("A7", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 7), addHalfSteps(baseNote, 10));
         baseNote = bFlatNote;
         aSharpDomSeventh.addChord("A#7", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 7), addHalfSteps(baseNote, 10));
         baseNote = bFlatNote;
@@ -508,7 +508,7 @@ if (twoBass.isSelected()){
         gSharpDomSeventh.addChord("G#7", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 7), addHalfSteps(baseNote, 10));
         baseNote = gSharpNote;
         aFlatDomSeventh.addChord("Ab7", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 7), addHalfSteps(baseNote, 10));
-        chordList.add(chordList.size(), aDom);
+        chordList.add(chordList.size(), aDomSeventh);
         chordList.add(chordList.size(), aSharpDomSeventh);
         chordList.add(chordList.size(), bFlatDomSeventh);
         chordList.add(chordList.size(), bDomSeventh);
@@ -528,7 +528,7 @@ if (twoBass.isSelected()){
     }
 
     public void makeMinorSeventhChords() {
-        Chord aMin = new Chord();
+        Chord aMinSeventh = new Chord();
         Chord aSharpMinSeventh = new Chord();
         Chord bFlatMinSeventh = new Chord();
         Chord bMinSeventh = new Chord();
@@ -547,7 +547,7 @@ if (twoBass.isSelected()){
         Chord aFlatMinSeventh = new Chord();
         int baseNote;
         baseNote = aNote;
-        aMin.addChord("Am7", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 3), addHalfSteps(baseNote, 7), addHalfSteps(baseNote, 10));
+        aMinSeventh.addChord("Am7", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 3), addHalfSteps(baseNote, 7), addHalfSteps(baseNote, 10));
         baseNote = bFlatNote;
         aSharpMinSeventh.addChord("A#m7", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 3), addHalfSteps(baseNote, 7), addHalfSteps(baseNote, 10));
         baseNote = bFlatNote;
@@ -580,7 +580,7 @@ if (twoBass.isSelected()){
         gSharpMinSeventh.addChord("G#m7", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 3), addHalfSteps(baseNote, 7), addHalfSteps(baseNote, 10));
         baseNote = gSharpNote;
         aFlatMinSeventh.addChord("Abm7", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 3), addHalfSteps(baseNote, 7), addHalfSteps(baseNote, 10));
-        chordList.add(chordList.size(), aMin);
+        chordList.add(chordList.size(), aMinSeventh);
         chordList.add(chordList.size(), aSharpMinSeventh);
         chordList.add(chordList.size(), bFlatMinSeventh);
         chordList.add(chordList.size(), bMinSeventh);
@@ -601,7 +601,7 @@ if (twoBass.isSelected()){
     }
 
     public void makeMajorSeventhChords() {
-        Chord aMaj = new Chord();
+        Chord aMajSeventh = new Chord();
         Chord aSharpMajSeventh = new Chord();
         Chord bFlatMajSeventh = new Chord();
         Chord bMajSeventh = new Chord();
@@ -620,7 +620,7 @@ if (twoBass.isSelected()){
         Chord aFlatMajSeventh = new Chord();
         int baseNote;
         baseNote = aNote;
-        aMaj.addChord("Amaj7", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 7), addHalfSteps(baseNote, 11));
+        aMajSeventh.addChord("Amaj7", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 7), addHalfSteps(baseNote, 11));
         baseNote = bFlatNote;
         aSharpMajSeventh.addChord("A#maj7", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 7), addHalfSteps(baseNote, 11));
         baseNote = bFlatNote;
@@ -653,7 +653,7 @@ if (twoBass.isSelected()){
         gSharpMajSeventh.addChord("G#maj7", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 7), addHalfSteps(baseNote, 11));
         baseNote = gSharpNote;
         aFlatMajSeventh.addChord("Abmaj7", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 7), addHalfSteps(baseNote, 11));
-        chordList.add(chordList.size(), aMaj);
+        chordList.add(chordList.size(), aMajSeventh);
         chordList.add(chordList.size(), aSharpMajSeventh);
         chordList.add(chordList.size(), bFlatMajSeventh);
         chordList.add(chordList.size(), bMajSeventh);
@@ -672,11 +672,221 @@ if (twoBass.isSelected()){
         chordList.add(chordList.size(), aFlatMajSeventh);
     }
 
+    public void makeDominantNinthChords(){
+             Chord aDomNinth = new Chord();
+        Chord aSharpDomNinth = new Chord();
+        Chord bFlatDomNinth = new Chord();
+        Chord bDomNinth = new Chord();
+        Chord cDomNinth = new Chord();
+        Chord cSharpDomNinth = new Chord();
+        Chord dFlatDomNinth = new Chord();
+        Chord dDomNinth = new Chord();
+        Chord dSharpDomNinth = new Chord();
+        Chord eFlatDomNinth = new Chord();
+        Chord eDomNinth = new Chord();
+        Chord fDomNinth = new Chord();
+        Chord fSharpDomNinth = new Chord();
+        Chord gFlatDomNinth = new Chord();
+        Chord gDomNinth = new Chord();
+        Chord gSharpDomNinth = new Chord();
+        Chord aFlatDomNinth = new Chord();
+        int baseNote;
+        baseNote = aNote;
+        aDomNinth.addChord("A9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 10));
+        baseNote = bFlatNote;
+        aSharpDomNinth.addChord("A#9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 10));
+        baseNote = bFlatNote;
+        bFlatDomNinth.addChord("Bb9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 10));
+        baseNote = bNote;
+        bDomNinth.addChord("B9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 10));
+        baseNote = cNote;
+        cDomNinth.addChord("C9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 10));
+        baseNote = cSharpNote;
+        cSharpDomNinth.addChord("C#9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 10));
+        baseNote = cSharpNote;
+        dFlatDomNinth.addChord("Db9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 10));
+        baseNote = dNote;
+        dDomNinth.addChord("D9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 10));
+        baseNote = dSharpNote;
+        dSharpDomNinth.addChord("D#9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 10));
+        baseNote = dSharpNote;
+        eFlatDomNinth.addChord("Eb9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 10));
+        baseNote = eNote;
+        eDomNinth.addChord("E9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 10));
+        baseNote = fNote;
+        fDomNinth.addChord("F9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 10));
+        baseNote = fSharpNote;
+        fSharpDomNinth.addChord("F#9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 10));
+        baseNote = fSharpNote;
+        gFlatDomNinth.addChord("Gb9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 10));
+        baseNote = gNote;
+        gDomNinth.addChord("G9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 10));
+        baseNote = gSharpNote;
+        gSharpDomNinth.addChord("G#9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 10));
+        baseNote = gSharpNote;
+        aFlatDomNinth.addChord("Ab9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 10));
+        chordList.add(chordList.size(), aDomNinth);
+        chordList.add(chordList.size(), aSharpDomNinth);
+        chordList.add(chordList.size(), bFlatDomNinth);
+        chordList.add(chordList.size(), bDomNinth);
+        chordList.add(chordList.size(), cDomNinth);
+        chordList.add(chordList.size(), cSharpDomNinth);
+        chordList.add(chordList.size(), dFlatDomNinth);
+        chordList.add(chordList.size(), dDomNinth);
+        chordList.add(chordList.size(), dSharpDomNinth);
+        chordList.add(chordList.size(), eFlatDomNinth);
+        chordList.add(chordList.size(), eDomNinth);
+        chordList.add(chordList.size(), fDomNinth);
+        chordList.add(chordList.size(), fSharpDomNinth);
+        chordList.add(chordList.size(), gFlatDomNinth);
+        chordList.add(chordList.size(), gDomNinth);
+        chordList.add(chordList.size(), gSharpDomNinth);
+        chordList.add(chordList.size(), aFlatDomNinth);
+    }
+    
     public void makeMinorNinthChords() {
+        Chord aMinNinth = new Chord();
+        Chord aSharpMinNinth = new Chord();
+        Chord bFlatMinNinth = new Chord();
+        Chord bMinNinth = new Chord();
+        Chord cMinNinth = new Chord();
+        Chord cSharpMinNinth = new Chord();
+        Chord dFlatMinNinth = new Chord();
+        Chord dMinNinth = new Chord();
+        Chord dSharpMinNinth = new Chord();
+        Chord eFlatMinNinth = new Chord();
+        Chord eMinNinth = new Chord();
+        Chord fMinNinth = new Chord();
+        Chord fSharpMinNinth = new Chord();
+        Chord gFlatMinNinth = new Chord();
+        Chord gMinNinth = new Chord();
+        Chord gSharpMinNinth = new Chord();
+        Chord aFlatMinNinth = new Chord();
+        int baseNote;
+        baseNote = aNote;
+        aMinNinth.addChord("Am9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 3), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 10));
+        baseNote = bFlatNote;
+        aSharpMinNinth.addChord("A#m9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 3), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 10));
+        baseNote = bFlatNote;
+        bFlatMinNinth.addChord("Bbm9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 3), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 10));
+        baseNote = bNote;
+        bMinNinth.addChord("Bm9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 3), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 10));
+        baseNote = cNote;
+        cMinNinth.addChord("Cm9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 3), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 10));
+        baseNote = cSharpNote;
+        cSharpMinNinth.addChord("C#m9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 3), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 10));
+        baseNote = cSharpNote;
+        dFlatMinNinth.addChord("Dbm9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 3), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 10));
+        baseNote = dNote;
+        dMinNinth.addChord("Dm9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 3), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 10));
+        baseNote = dSharpNote;
+        dSharpMinNinth.addChord("D#m9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 3), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 10));
+        baseNote = dSharpNote;
+        eFlatMinNinth.addChord("Ebm9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 3), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 10));
+        baseNote = eNote;
+        eMinNinth.addChord("Em9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 3), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 10));
+        baseNote = fNote;
+        fMinNinth.addChord("Fm9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 3), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 10));
+        baseNote = fSharpNote;
+        fSharpMinNinth.addChord("F#m9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 3), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 10));
+        baseNote = fSharpNote;
+        gFlatMinNinth.addChord("Gbm9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 3), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 10));
+        baseNote = gNote;
+        gMinNinth.addChord("Gm9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 3), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 10));
+        baseNote = gSharpNote;
+        gSharpMinNinth.addChord("G#m9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 3), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 10));
+        baseNote = gSharpNote;
+        aFlatMinNinth.addChord("Abm9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 3), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 10));
+        chordList.add(chordList.size(), aMinNinth);
+        chordList.add(chordList.size(), aSharpMinNinth);
+        chordList.add(chordList.size(), bFlatMinNinth);
+        chordList.add(chordList.size(), bMinNinth);
+        chordList.add(chordList.size(), cMinNinth);
+        chordList.add(chordList.size(), cSharpMinNinth);
+        chordList.add(chordList.size(), dFlatMinNinth);
+        chordList.add(chordList.size(), dMinNinth);
+        chordList.add(chordList.size(), dSharpMinNinth);
+        chordList.add(chordList.size(), eFlatMinNinth);
+        chordList.add(chordList.size(), eMinNinth);
+        chordList.add(chordList.size(), fMinNinth);
+        chordList.add(chordList.size(), fSharpMinNinth);
+        chordList.add(chordList.size(), gFlatMinNinth);
+        chordList.add(chordList.size(), gMinNinth);
+        chordList.add(chordList.size(), gSharpMinNinth);
+        chordList.add(chordList.size(), aFlatMinNinth);
 
     }
 
     public void makeMajorNinthChords() {
+        Chord aMajNinth = new Chord();
+        Chord aSharpMajNinth = new Chord();
+        Chord bFlatMajNinth = new Chord();
+        Chord bMajNinth = new Chord();
+        Chord cMajNinth = new Chord();
+        Chord cSharpMajNinth = new Chord();
+        Chord dFlatMajNinth = new Chord();
+        Chord dMajNinth = new Chord();
+        Chord dSharpMajNinth = new Chord();
+        Chord eFlatMajNinth = new Chord();
+        Chord eMajNinth = new Chord();
+        Chord fMajNinth = new Chord();
+        Chord fSharpMajNinth = new Chord();
+        Chord gFlatMajNinth = new Chord();
+        Chord gMajNinth = new Chord();
+        Chord gSharpMajNinth = new Chord();
+        Chord aFlatMajNinth = new Chord();
+        int baseNote;
+        baseNote = aNote;
+        aMajNinth.addChord("Amaj9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 11));
+        baseNote = bFlatNote;
+        aSharpMajNinth.addChord("A#maj9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 11));
+        baseNote = bFlatNote;
+        bFlatMajNinth.addChord("Bbmaj9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 11));
+        baseNote = bNote;
+        bMajNinth.addChord("Bmaj9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 11));
+        baseNote = cNote;
+        cMajNinth.addChord("Cmaj9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 11));
+        baseNote = cSharpNote;
+        cSharpMajNinth.addChord("C#maj9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 11));
+        baseNote = cSharpNote;
+        dFlatMajNinth.addChord("Dbmaj9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 11));
+        baseNote = dNote;
+        dMajNinth.addChord("Dmaj9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 11));
+        baseNote = dSharpNote;
+        dSharpMajNinth.addChord("D#maj9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 11));
+        baseNote = dSharpNote;
+        eFlatMajNinth.addChord("Ebmaj9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 11));
+        baseNote = eNote;
+        eMajNinth.addChord("Emaj9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 11));
+        baseNote = fNote;
+        fMajNinth.addChord("Fmaj9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 11));
+        baseNote = fSharpNote;
+        fSharpMajNinth.addChord("F#maj9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 11));
+        baseNote = fSharpNote;
+        gFlatMajNinth.addChord("Gbmaj9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 11));
+        baseNote = gNote;
+        gMajNinth.addChord("Gmaj9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 11));
+        baseNote = gSharpNote;
+        gSharpMajNinth.addChord("G#maj9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 11));
+        baseNote = gSharpNote;
+        aFlatMajNinth.addChord("Abmaj9", addHalfSteps(baseNote, 0), addHalfSteps(baseNote, 4), addHalfSteps(baseNote, 2), addHalfSteps(baseNote, 11));
+        chordList.add(chordList.size(), aMajNinth);
+        chordList.add(chordList.size(), aSharpMajNinth);
+        chordList.add(chordList.size(), bFlatMajNinth);
+        chordList.add(chordList.size(), bMajNinth);
+        chordList.add(chordList.size(), cMajNinth);
+        chordList.add(chordList.size(), cSharpMajNinth);
+        chordList.add(chordList.size(), dFlatMajNinth);
+        chordList.add(chordList.size(), dMajNinth);
+        chordList.add(chordList.size(), dSharpMajNinth);
+        chordList.add(chordList.size(), eFlatMajNinth);
+        chordList.add(chordList.size(), eMajNinth);
+        chordList.add(chordList.size(), fMajNinth);
+        chordList.add(chordList.size(), fSharpMajNinth);
+        chordList.add(chordList.size(), gFlatMajNinth);
+        chordList.add(chordList.size(), gMajNinth);
+        chordList.add(chordList.size(), gSharpMajNinth);
+        chordList.add(chordList.size(), aFlatMajNinth);
 
     }
 
